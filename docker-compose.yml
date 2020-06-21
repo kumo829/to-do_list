@@ -18,3 +18,14 @@ services:
     restart: always
     networks:
       - TO-DO-cloud-network
+
+  zuul-server:
+    image: todo-zuul-server:v1.0.1
+    ports:
+    - "8090:8090"
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+    depends_on:
+      - eureka-server
+      - config-server
