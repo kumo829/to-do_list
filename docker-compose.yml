@@ -1,0 +1,20 @@
+version: '3.7'
+networks:
+  TO-DO-cloud-network:
+
+services:
+  config-server:
+    image: todo-config-server:v1.0.0
+    ports:
+    - "8888:8888"
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+
+  eureka-server:
+    image: todo-eureka-server:v1.0.0
+    ports:
+    - "8761:8761"
+    restart: always
+    networks:
+      - TO-DO-cloud-network
