@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>zuul-server</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>zuul-server</name>
     <description>Zuul server for TO-DO project</description>
 
@@ -21,6 +21,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
         </dependency>
     </dependencies>
 
