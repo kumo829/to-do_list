@@ -3,24 +3,30 @@ networks:
   TO-DO-cloud-network:
 
 services:
-  config-server:
-    image: todo-config-server:v1.0.0
-    ports:
-    - "8888:8888"
-    restart: always
-    networks:
-      - TO-DO-cloud-network
 
   eureka-server:
     image: todo-eureka-server:v1.0.0
     ports:
-    - "8761:8761"
+      - "8761:8761"
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+
+  config-server:
+    image: todo-config-server:v1.0.0
+    environment:
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME=
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD=
+    ports:
+      - "8888:8888"
     restart: always
     networks:
       - TO-DO-cloud-network
 
   zuul-server:
-    image: todo-zuul-server:v1.0.1
+    image: todo-zuul-server:v1.0.2
+    environment:
+     - "JAVA_OPTS=-DEUREKA_SERVER=http://eureka-server:8761/eureka/"
     ports:
     - "8090:8090"
     restart: always
@@ -28,4 +34,3 @@ services:
       - TO-DO-cloud-network
     depends_on:
       - eureka-server
-      - config-server
