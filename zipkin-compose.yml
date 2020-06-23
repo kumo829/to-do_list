@@ -88,5 +88,5 @@ services:
     depends_on:
       - grafana
     volumes:
-      - ./prometheus/create-datasource-and-dashboard.sh:/create.sh:ro
-    command: /create.sh
+      - ./prometheus/create-datasource-and-dashboard.sh:/create.sh
+    command: /create.sh/create.sh

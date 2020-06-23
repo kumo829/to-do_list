@@ -17,4 +17,7 @@ The initial version of the architecture will include a lot of Spring Cloud compo
  
  ###  Diagram
  
-Here I'll put the 
+The architecture proposes a series of microservices and three applications, a mobile app developed using Xamarin.Forms, an admin website and a client´s web app.
+
+![Architecture](./img/Backend_Detailed_Architecture.png)
+    
