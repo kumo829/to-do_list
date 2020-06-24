@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: user-service
+  hateoas:
+    use-hal-as-default-json-media-type: false
+  jackson:
+    default-property-inclusion: NON_ABSENT
+
+  data:
+    mongodb:
+      database: user_db
+      host: localhost
+      port: 27017
+
+server:
+  port: {PORT:0}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+
