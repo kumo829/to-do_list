@@ -2,6 +2,7 @@ package com.javatutoriales.todo.userservice.controller.hateoas;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import com.javatutoriales.todo.userservice.controller.UserController;
 import lombok.Getter;
 import lombok.Setter;
 

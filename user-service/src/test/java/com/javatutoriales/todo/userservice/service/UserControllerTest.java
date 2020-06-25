@@ -37,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
+    private static final String API_URL = "/api/v1/users";
+
     @Mock
     UserService userService;
 
@@ -69,7 +71,7 @@ public class UserControllerTest {
     public void whenGetAllUsers_ThenReturnListOfUsers() throws Exception {
         given(userService.findAll()).willReturn(Arrays.asList(user1, user2, user3));
 
-        mockMvc.perform(get("/users").accept(MediaTypes.HAL_JSON_VALUE))
+        mockMvc.perform(get(API_URL).accept(MediaTypes.HAL_JSON_VALUE))
 
                 .andExpect(status().isOk())
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
@@ -91,12 +93,12 @@ public class UserControllerTest {
     public void whenGetSingleUser_thenFoundUser() throws Exception {
         given(userService.findById("ABC")).willReturn(Optional.of(user2));
 
-        mockMvc.perform(get("/users/{id}", "ABC").accept(MediaTypes.HAL_JSON_VALUE))
+        mockMvc.perform(get(API_URL + "/{id}", "ABC").accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isOk())
 
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(header().string(HttpHeaders.ETAG, "\"ABC\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, "/users/" + user2.getId()))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + user2.getId()))
 
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").isNotEmpty())
@@ -114,7 +116,7 @@ public class UserControllerTest {
     public void whenGetSingleUser_thenNotFound() throws Exception {
         given(userService.findById(anyString())).willReturn(Optional.empty());
 
-        mockMvc.perform(get("/users/{id}", "BCA").accept(MediaTypes.HAL_JSON_VALUE))
+        mockMvc.perform(get(API_URL + "/{id}", "BCA").accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isNotFound())
                 .andExpect(header().doesNotExist(HttpHeaders.CONTENT_TYPE))
                 .andExpect(jsonPath("$").doesNotExist())
@@ -136,12 +138,12 @@ public class UserControllerTest {
 
         given(userService.save(any())).willReturn(mockUser);
 
-        mockMvc.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(asJsonString(postUser)))
+        mockMvc.perform(post(API_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(postUser)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(header().string(HttpHeaders.ETAG, "\"" + uuid + "\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, "/users/" + uuid))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + uuid))
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(postUser.getUsername())))
 
@@ -162,13 +164,13 @@ public class UserControllerTest {
         given(userService.findById(uuid)).willReturn(Optional.of(mockUser));
         given(userService.update(any())).willReturn(true);
 
-        mockMvc.perform(put("/users/{id}", uuid)
+        mockMvc.perform(put(API_URL + "/{id}", uuid)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(putUser)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(header().string(HttpHeaders.LOCATION, "/users/" + uuid))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + uuid))
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(putUser.getUsername())))
 
@@ -176,6 +178,25 @@ public class UserControllerTest {
 
         then(userService).should(times(1)).findById(any());
         then(userService).should(times(1)).update(any());
+        then(userService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    @DisplayName("DELETE /users/ABC - SUCCESS")
+    public void whenUserDelete_thenRecordDeleted() throws Exception{
+        given(userService.findById(user2.getId())).willReturn(Optional.of(user2));
+        given(userService.delete(anyString())).willReturn(true);
+
+        mockMvc.perform(delete(API_URL + "/{id}", "ABC")
+                .contentType(MediaType.APPLICATION_JSON))
+
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/ABC"))
+
+                .andDo(print());
+
+        then(userService).should(times(1)).findById(user2.getId());
+        then(userService).should(times(1)).delete(anyString());
         then(userService).shouldHaveNoMoreInteractions();
     }
 }
