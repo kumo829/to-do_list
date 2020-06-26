@@ -1,0 +1,16 @@
+[
+  {
+    "id": "f1abe44f-caaf-4352-8584-899fe89f458c",
+    "version": 1,
+    "name": "Administrator",
+    "createdDate": "2020-01-26 04:03:31.546Z",
+    "modifiedDate": "2020-02-26 04:03:31.546Z"
+  },
+  {
+    "id": "e1ed52d3-19c0-46b7-82c1-1673dc5e8d64",
+    "version": 7,
+    "name": "User",
+    "createdDate": "2020-03-26 04:03:31.546Z",
+    "modifiedDate": "2020-04-26 04:03:31.546Z"
+  }
+]

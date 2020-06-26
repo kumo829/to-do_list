@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/users") //TODO: Update route in zuul server
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -37,7 +37,7 @@ public class UserController {
         return userService.findById(id).map(user -> ResponseEntity
                 .ok()
                 .eTag(user.getId())
-                .location(URI.create( API_URL + "/" + user.getId()))
+                .location(URI.create(API_URL + "/" + user.getId()))
                 .body(userAssembler.toModel(user))).orElse(ResponseEntity.notFound().build());
     }
 
@@ -48,7 +48,7 @@ public class UserController {
         User newUser = userService.save(user);
 
         return ResponseEntity
-                .created(URI.create( API_URL + "/" + newUser.getId()))
+                .created(URI.create(API_URL + "/" + newUser.getId()))
                 .eTag(newUser.getId()) //TODO: replace id on etag for object version
                 .body(userAssembler.toModel(newUser));
     }
@@ -63,7 +63,7 @@ public class UserController {
             if (userService.update(u)) {
                 return ResponseEntity
                         .ok()
-                        .location(URI.create( API_URL + "/" + u.getId()))
+                        .location(URI.create(API_URL + "/" + u.getId()))
                         .body(userAssembler.toModel(u));
             } else {
                 return ResponseEntity.notFound().build();
@@ -76,14 +76,12 @@ public class UserController {
         Optional<User> existingUser = userService.findById(id);
 
         return (ResponseEntity<EntityModel<User>>) existingUser.map(u -> {
-            if (userService.delete(id)) {
-                return ResponseEntity
-                        .ok()
-                        .location(URI.create( API_URL +"/" + u.getId()))
-                        .body(userAssembler.toModel(u));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            userService.delete(id);
+            return ResponseEntity
+                    .ok()
+                    .location(URI.create(API_URL + "/" + u.getId()))
+                    .body(userAssembler.toModel(u));
+
         }).orElse(ResponseEntity.notFound().build());
     }
 }
