@@ -25,7 +25,6 @@ import org.springframework.util.ReflectionUtils;
  *
  * @author Greg Turnquist
  */
-@Component
 public class SimpleIdentifiableRepresentationModelAssembler<T> implements SimpleRepresentationModelAssembler<T> {
 
     /**

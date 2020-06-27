@@ -26,7 +26,7 @@ services:
   zuul-server:
     image: todo-zuul-server:v1.0.2
     environment:
-     - "JAVA_OPTS=-DEUREKA_SERVER=http://eureka-server:8761/eureka/"
+     - "EUREKA_SERVER=http://eureka-server:8761/eureka/"
     ports:
     - "8090:8090"
     restart: always
