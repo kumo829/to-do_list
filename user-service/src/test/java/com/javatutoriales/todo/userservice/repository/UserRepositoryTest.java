@@ -79,6 +79,29 @@ public class UserRepositoryTest {
         System.out.println(users);
     }
 
+    @Test
+    @DisplayName("Find User By Username - SUCCESS")
+    @MongoDataFile(value = "users.json", classType = User.class, collectionName = "users")
+    void whenFindByUsername_thenReturnUser() {
+        Optional<User> user = userRepository.findByUsername("newUser");
+
+        assertThat(user).isPresent().isNotNull();
+        assertThat(user.get().getId()).isEqualTo("e140057d-a6b6-437c-89be-8ab7b7a25572");
+        assertThat(user.get().getUsername()).isEqualTo("newUser");
+        assertThat(user.get().getEmail()).isEqualTo("user@mail.com");
+    }
+
+    @Test
+    @DisplayName("Find User By Username - Not Found")
+    @MongoDataFile(value = "users.json", classType = User.class, collectionName = "users")
+    void whenFindByUsername_thenNotFoundUser() {
+        Optional<User> user = userRepository.findByUsername("nonExistingUser");
+
+        assertThat(user).isNotPresent();
+    }
+
+
+
     @Disabled
     @Test
     @DisplayName("Save Users - FAIL")

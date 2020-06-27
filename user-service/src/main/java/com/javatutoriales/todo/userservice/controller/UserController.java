@@ -36,7 +36,7 @@ public class UserController {
 
         return userService.findById(id).map(user -> ResponseEntity
                 .ok()
-                .eTag(user.getId())
+                .eTag(Integer.toString(user.getVersion()))
                 .location(URI.create(API_URL + "/" + user.getId()))
                 .body(userAssembler.toModel(user))).orElse(ResponseEntity.notFound().build());
     }
@@ -49,7 +49,7 @@ public class UserController {
 
         return ResponseEntity
                 .created(URI.create(API_URL + "/" + newUser.getId()))
-                .eTag(newUser.getId()) //TODO: replace id on etag for object version
+                .eTag(Integer.toString(newUser.getVersion()))
                 .body(userAssembler.toModel(newUser));
     }
 
@@ -60,14 +60,14 @@ public class UserController {
         return (ResponseEntity<EntityModel<User>>) existingUser.map(u -> {
             u.setPassword(user.getPassword());
 
-            if (userService.update(u)) {
-                return ResponseEntity
-                        .ok()
-                        .location(URI.create(API_URL + "/" + u.getId()))
-                        .body(userAssembler.toModel(u));
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+            User updatedUser = userService.update(u);
+
+            return ResponseEntity
+                    .ok()
+                    .eTag(Integer.toString(updatedUser.getVersion()))
+                    .location(URI.create(API_URL + "/" + u.getId()))
+                    .body(userAssembler.toModel(updatedUser));
+
         }).orElse(ResponseEntity.notFound().build());
     }
 
@@ -79,7 +79,6 @@ public class UserController {
             userService.delete(id);
             return ResponseEntity
                     .ok()
-                    .location(URI.create(API_URL + "/" + u.getId()))
                     .body(userAssembler.toModel(u));
 
         }).orElse(ResponseEntity.notFound().build());

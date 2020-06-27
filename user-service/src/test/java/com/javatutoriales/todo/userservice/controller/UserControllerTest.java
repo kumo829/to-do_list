@@ -1,8 +1,8 @@
-package com.javatutoriales.todo.userservice.service;
+package com.javatutoriales.todo.userservice.controller;
 
-import com.javatutoriales.todo.userservice.controller.UserController;
 import com.javatutoriales.todo.userservice.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ public class UserControllerTest {
 
 
         user1 = User.builder().id("123").username("user1@mail.com").build();
-        user2 = User.builder().id("ABC").username("user2@mail.com").build();
+        user2 = User.builder().id("ABC").username("user2@mail.com").version(1).build();
         user3 = User.builder().id("AB123").username("user3@mail.com").build();
     }
 
@@ -97,7 +97,7 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
 
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
-                .andExpect(header().string(HttpHeaders.ETAG, "\"ABC\""))
+                .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
                 .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + user2.getId()))
 
                 .andExpect(jsonPath("$").exists())
@@ -134,7 +134,7 @@ public class UserControllerTest {
 
         String uuid = UUID.randomUUID().toString();
         User postUser = User.builder().username("new_user").build();
-        User mockUser = User.builder().id(uuid).username("new_user").build();
+        User mockUser = User.builder().id(uuid).username("new_user").version(1).build();
 
         given(userService.save(any())).willReturn(mockUser);
 
@@ -142,7 +142,7 @@ public class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(header().string(HttpHeaders.ETAG, "\"" + uuid + "\""))
+                .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
                 .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + uuid))
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(postUser.getUsername())))
@@ -160,9 +160,11 @@ public class UserControllerTest {
 
         User putUser = User.builder().username("updated_user").build();
         User mockUser = new User(uuid, "updated_user");
+        User updatedUser = new User(uuid, "updated_user");
+        updatedUser.setVersion(2);
 
         given(userService.findById(uuid)).willReturn(Optional.of(mockUser));
-        given(userService.update(any())).willReturn(true);
+        given(userService.update(any())).willReturn(updatedUser);
 
         mockMvc.perform(put(API_URL + "/{id}", uuid)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -170,7 +172,9 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
+                .andExpect(header().string(HttpHeaders.ETAG, "\"2\""))
                 .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + uuid))
+
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(putUser.getUsername())))
 
@@ -185,13 +189,11 @@ public class UserControllerTest {
     @DisplayName("DELETE /users/ABC - SUCCESS")
     public void whenUserDelete_thenRecordDeleted() throws Exception{
         given(userService.findById(user2.getId())).willReturn(Optional.of(user2));
-        given(userService.delete(anyString())).willReturn(true);
 
         mockMvc.perform(delete(API_URL + "/{id}", "ABC")
                 .contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(status().isOk())
-                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/ABC"))
 
                 .andDo(print());
 
