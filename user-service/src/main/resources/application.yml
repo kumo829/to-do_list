@@ -9,8 +9,8 @@ spring:
   data:
     mongodb:
       database: user_db
-      host: localhost
-      port: 27017
+      host: ${MONGODB_USERS_HOST:localhost}
+      port: ${MONGODB_USERS_PORT:27017}
 
 server:
   port: {PORT:0}
