@@ -54,7 +54,7 @@ public class RoleRepositoryTest {
     @Test
     @DisplayName("Get all Roles - SUCCESS")
     @MongoDataFile(value = "roles.json", classType = Role.class, collectionName = "roles")
-    public void whenGetAllRoles_thenRolesListHasTwoElements(){
+    public void whenGetAllRoles_thenRolesListHasTwoElements() {
         List<Role> roleList = roleRepository.findAll();
 
         assertThat(roleList).hasSize(2);
@@ -82,7 +82,7 @@ public class RoleRepositoryTest {
     @Test
     @DisplayName("Delete Role - SUCCESS")
     @MongoDataFile(value = "roles.json", classType = Role.class, collectionName = "roles")
-    public void whenDeleteRoleFromMongo_ThenRoleNoLongerExists(){
+    public void whenDeleteRoleFromMongo_ThenRoleNoLongerExists() {
         List<Role> originalList = roleRepository.findAll();
 
         roleRepository.delete(originalList.get(1)); //"User" role

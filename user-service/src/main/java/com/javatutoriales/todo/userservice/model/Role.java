@@ -29,7 +29,7 @@ public class Role {
 
     @NotBlank
     @Size(max = 20)
-    @Indexed(unique = true)
+    @Indexed(unique = true, name = "role_name_index_unique")
     private String name;
 
     @CreatedDate

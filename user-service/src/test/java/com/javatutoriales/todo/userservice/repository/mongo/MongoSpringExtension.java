@@ -76,7 +76,7 @@ public class MongoSpringExtension implements BeforeEachCallback, AfterEachCallba
 
             // Load the MongoTemplate that we can use to drop the test collection
             Optional<MongoTemplate> mongoTemplate = getMongoTemplate(context);
-            mongoTemplate.ifPresent(t -> t.dropCollection(mongoDataFile.collectionName()));
+            //mongoTemplate.ifPresent(t -> t.dropCollection(mongoDataFile.collectionName()));
         });
     }
 

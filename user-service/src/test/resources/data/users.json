@@ -1,0 +1,85 @@
+[
+  {
+    "id": "e140057d-a6b6-437c-89be-8ab7b7a25572",
+    "version": 1,
+    "username": "newUser",
+    "email": "user@mail.com",
+    "password": "hasdifsdhf",
+    "enabled": true,
+    "createdDate": "2020-06-26 22:47:21.257Z",
+    "modifiedDate": "2020-06-26 22:47:21.257Z",
+    "roles": [
+      {
+        "id": "e1ed52d3-19c0-46b7-82c1-1673dc5e8d64",
+        "version": 7,
+        "name": "User",
+        "createdDate": "2020-03-26 04:03:31.546Z",
+        "modifiedDate": "2020-04-26 04:03:31.546Z"
+      }
+    ]
+  },
+  {
+    "id": "cdab060e-3bf8-4187-ba12-8b27fb1b4aed",
+    "version": 3,
+    "username": "otherUser",
+    "email": "otheruser@mail.com",
+    "password": "hasdifsdhf",
+    "enabled": true,
+    "createdDate": "2020-06-26 22:47:21.257Z",
+    "modifiedDate": "2020-06-26 22:47:21.257Z",
+    "roles": [
+      {
+        "id": "e1ed52d3-19c0-46b7-82c1-1673dc5e8d64",
+        "version": 7,
+        "name": "User",
+        "createdDate": "2020-03-26 04:03:31.546Z",
+        "modifiedDate": "2020-04-26 04:03:31.546Z"
+      }
+    ]
+  },
+  {
+    "id": "9296dbb7-3049-4f65-8fa7-9fcdc62a56a8",
+    "version": 2,
+    "username": "admin",
+    "email": "admin@domail.com",
+    "password": "abc213",
+    "enabled": true,
+    "createdDate": "2020-06-26 22:47:21.257Z",
+    "modifiedDate": "2020-06-26 22:47:21.257Z",
+    "roles": [
+      {
+        "id": "f1abe44f-caaf-4352-8584-899fe89f458c",
+        "version": 1,
+        "name": "Administrator",
+        "createdDate": "2020-01-26 04:03:31.546Z",
+        "modifiedDate": "2020-02-26 04:03:31.546Z"
+      }
+    ]
+  },
+  {
+    "id": "97a4363a-f269-48ac-982e-c1a282474ba0",
+    "version": 2,
+    "username": "adminanduser",
+    "email": "adminanduser@domail.com",
+    "password": "abc213",
+    "enabled": true,
+    "createdDate": "2020-06-26 22:47:21.257Z",
+    "modifiedDate": "2020-06-26 22:47:21.257Z",
+    "roles": [
+      {
+        "id": "f1abe44f-caaf-4352-8584-899fe89f458c",
+        "version": 1,
+        "name": "Administrator",
+        "createdDate": "2020-01-26 04:03:31.546Z",
+        "modifiedDate": "2020-02-26 04:03:31.546Z"
+      },
+      {
+        "id": "e1ed52d3-19c0-46b7-82c1-1673dc5e8d64",
+        "version": 7,
+        "name": "User",
+        "createdDate": "2020-03-26 04:03:31.546Z",
+        "modifiedDate": "2020-04-26 04:03:31.546Z"
+      }
+    ]
+  }
+]

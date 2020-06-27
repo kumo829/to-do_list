@@ -58,7 +58,7 @@ public class UserController {
         Optional<User> existingUser = userService.findById(id);
 
         return (ResponseEntity<EntityModel<User>>) existingUser.map(u -> {
-            u.setUsername(user.getUsername());
+            u.setPassword(user.getPassword());
 
             if (userService.update(u)) {
                 return ResponseEntity
