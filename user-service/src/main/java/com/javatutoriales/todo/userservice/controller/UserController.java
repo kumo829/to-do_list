@@ -29,12 +29,12 @@ public class UserController {
         return ResponseEntity.ok(userAssembler.toCollectionModel(userService.findAll()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<User>> getUser(@PathVariable("id") String id) {
+    @GetMapping("/{username}")
+    public ResponseEntity<EntityModel<User>> getUser(@PathVariable("username") String username) {
 
-        log.info("/users/{}", id);
+        log.info("/users/{}", username);
 
-        return userService.findById(id).map(user -> ResponseEntity
+        return userService.findByUsername(username).map(user -> ResponseEntity
                 .ok()
                 .eTag(Integer.toString(user.getVersion()))
                 .location(URI.create(API_URL + "/" + user.getId()))
@@ -57,7 +57,7 @@ public class UserController {
     public ResponseEntity<EntityModel<User>> updateUser(@RequestBody User user, @PathVariable String id) {
         Optional<User> existingUser = userService.findById(id);
 
-        return (ResponseEntity<EntityModel<User>>) existingUser.map(u -> {
+        return existingUser.map(u -> {
             u.setPassword(user.getPassword());
 
             User updatedUser = userService.update(u);
@@ -75,7 +75,7 @@ public class UserController {
     public ResponseEntity<EntityModel<User>> deleteUser(@PathVariable String id) {
         Optional<User> existingUser = userService.findById(id);
 
-        return (ResponseEntity<EntityModel<User>>) existingUser.map(u -> {
+        return existingUser.map(u -> {
             userService.delete(id);
             return ResponseEntity
                     .ok()

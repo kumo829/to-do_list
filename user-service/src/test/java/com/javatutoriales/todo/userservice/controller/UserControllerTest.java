@@ -29,6 +29,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -61,9 +62,9 @@ public class UserControllerTest {
                 .build();
 
 
-        user1 = User.builder().id("123").username("user1@mail.com").build();
-        user2 = User.builder().id("ABC").username("user2@mail.com").version(1).build();
-        user3 = User.builder().id("AB123").username("user3@mail.com").build();
+        user1 = User.builder().id("123").username("user1").email("user1@mail.com").build();
+        user2 = User.builder().id("ABC").username("user2").email("user2@mail.com").version(1).build();
+        user3 = User.builder().id("AB123").username("user3").email("user3@mail.com").build();
     }
 
     @Test
@@ -89,11 +90,11 @@ public class UserControllerTest {
     }
 
     @Test
-    @DisplayName("GET /users/ABC - FOUND")
-    public void whenGetSingleUser_thenFoundUser() throws Exception {
-        given(userService.findById("ABC")).willReturn(Optional.of(user2));
+    @DisplayName("GET /users/user1 - FOUND")
+    public void whenGetSingleUserByUsename_thenFoundUser() throws Exception {
+        given(userService.findByUsername(user2.getId())).willReturn(Optional.of(user2));
 
-        mockMvc.perform(get(API_URL + "/{id}", "ABC").accept(MediaTypes.HAL_JSON_VALUE))
+        mockMvc.perform(get(API_URL + "/{username}", user2.getId()).accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isOk())
 
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
@@ -104,17 +105,19 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$").isNotEmpty())
                 .andExpect(jsonPath("$.id", is(user2.getId())))
                 .andExpect(jsonPath("$.username", is(user2.getUsername())))
+                .andExpect(jsonPath("$.email", is(user2.getEmail())))
 
                 .andDo(print());
 
-        then(userService).should().findById(anyString());
+        then(userService).should(times(1)).findByUsername(anyString());
+        then(userService).should(never()).findById(anyString());
         then(userService).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("GET /users/CBA - NOT_FOUND")
     public void whenGetSingleUser_thenNotFound() throws Exception {
-        given(userService.findById(anyString())).willReturn(Optional.empty());
+        given(userService.findByUsername(anyString())).willReturn(Optional.empty());
 
         mockMvc.perform(get(API_URL + "/{id}", "BCA").accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isNotFound())
@@ -124,7 +127,8 @@ public class UserControllerTest {
 
                 .andDo(print());
 
-        then(userService).should().findById(anyString());
+        then(userService).should(times(1)).findByUsername(anyString());
+        then(userService).should(never()).findById(anyString());
         then(userService).shouldHaveNoMoreInteractions();
     }
 
