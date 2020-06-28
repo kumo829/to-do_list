@@ -3,10 +3,16 @@ package com.javatutoriales.todo.userservice.controller;
 import com.javatutoriales.todo.userservice.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.userservice.model.User;
 import com.javatutoriales.todo.userservice.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +24,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/users") //TODO: Update route in zuul server
 @RequiredArgsConstructor
 @Slf4j
+@Api(description="Users management operations.",  tags = {"User service"}, produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private static final String API_URL = "/api/v1/users";
@@ -26,6 +33,14 @@ public class UserController {
     private final UserResourceAssembler userAssembler;
 
     @GetMapping
+    @ApiOperation(value = "Get all the users on the system", notes = "Result is not paginated, so potententially can get thousands of records",
+                    produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })
     public ResponseEntity<CollectionModel<EntityModel<User>>> getUsers() {
         return ResponseEntity.ok(userAssembler.toCollectionModel(userService.findAll()));
     }
