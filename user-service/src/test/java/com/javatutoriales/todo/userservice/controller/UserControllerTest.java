@@ -25,8 +25,7 @@ import static com.javatutoriales.todo.userservice.TestUtils.asJsonString;
 import static com.javatutoriales.todo.userservice.TestUtils.jackson2HttpMessageConverter;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
@@ -137,8 +136,8 @@ public class UserControllerTest {
     public void whenNewUser_thenNewRecordCreated() throws Exception {
 
         String uuid = UUID.randomUUID().toString();
-        User postUser = User.builder().username("new_user").build();
-        User mockUser = User.builder().id(uuid).username("new_user").version(1).build();
+        User postUser = User.builder().username("new_user").email("new_user@mail.com").password("asdf").build();
+        User mockUser = User.builder().id(uuid).username("new_user").email("new_user@mail.com").version(1).build();
 
         given(userService.save(any())).willReturn(mockUser);
 
@@ -162,13 +161,13 @@ public class UserControllerTest {
     public void whenUserUpdate_thenRecordUpdated() throws Exception {
         String uuid = UUID.randomUUID().toString();
 
-        User putUser = User.builder().username("updated_user").build();
+        User putUser = User.builder().username("updated_user").password("qwert").email("updated_user@mail.com").build();
         User mockUser = new User(uuid, "updated_user");
         User updatedUser = new User(uuid, "updated_user");
         updatedUser.setVersion(2);
 
-        given(userService.findById(uuid)).willReturn(Optional.of(mockUser));
-        given(userService.update(any())).willReturn(updatedUser);
+        //given(userService.findById(uuid)).willReturn(Optional.of(mockUser));
+        given(userService.update(eq(uuid), any())).willReturn(Optional.of(updatedUser));
 
         mockMvc.perform(put(API_URL + "/{id}", uuid)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -184,15 +183,15 @@ public class UserControllerTest {
 
                 .andDo(print());
 
-        then(userService).should(times(1)).findById(any());
-        then(userService).should(times(1)).update(any());
+        then(userService).should(never()).findById(any());
+        then(userService).should(times(1)).update(anyString(), any());
         then(userService).shouldHaveNoMoreInteractions();
     }
 
     @Test
     @DisplayName("DELETE /users/ABC - SUCCESS")
     public void whenUserDelete_thenRecordDeleted() throws Exception{
-        given(userService.findById(user2.getId())).willReturn(Optional.of(user2));
+        given(userService.delete(user2.getId())).willReturn(Optional.of(user2));
 
         mockMvc.perform(delete(API_URL + "/{id}", "ABC")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -201,7 +200,7 @@ public class UserControllerTest {
 
                 .andDo(print());
 
-        then(userService).should(times(1)).findById(user2.getId());
+        then(userService).should(never()).findById(user2.getId());
         then(userService).should(times(1)).delete(anyString());
         then(userService).shouldHaveNoMoreInteractions();
     }

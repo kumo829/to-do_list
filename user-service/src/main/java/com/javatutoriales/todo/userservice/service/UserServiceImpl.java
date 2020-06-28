@@ -36,13 +36,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(User user) {
-        user.setVersion(user.getVersion() + 1);
-        return userRepository.save(user);
+    public Optional<User> update(String userId, User user) {
+        Optional<User> existingUser = this.findById(userId);
+
+        return existingUser.map(u -> {
+            u.setPassword(user.getPassword());
+            u.setVersion(user.getVersion() + 1);
+            return Optional.of(userRepository.save(u));
+        }).orElse(Optional.empty());
     }
 
     @Override
-    public void delete(String id) {
-        userRepository.deleteById(id);
+    public Optional<User> delete(String userId) {
+        Optional<User> existingUser = this.findById(userId);
+
+        return existingUser.map(user -> {
+            userRepository.deleteById(userId);
+            return existingUser;
+        }).orElse(Optional.empty());
     }
 }

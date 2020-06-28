@@ -23,7 +23,6 @@ public class User {
     @Id
     private String id;
 
-    @Positive
     private int version;
 
     @NotBlank

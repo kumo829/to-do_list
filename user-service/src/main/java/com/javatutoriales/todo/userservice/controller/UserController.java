@@ -18,13 +18,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users") //TODO: Update route in zuul server
 @RequiredArgsConstructor
 @Slf4j
-@Api(description="Users management operations.",  tags = {"User service"}, produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+@Api(description = "Users management operations.", tags = {"User service"}, produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private static final String API_URL = "/api/v1/users";
@@ -34,7 +33,7 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(value = "Get all the users on the system", notes = "Result is not paginated, so potententially can get thousands of records",
-                    produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+            produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully retrieved list"),
             @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
@@ -71,32 +70,20 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EntityModel<User>> updateUser(@RequestBody @Valid User user, @PathVariable String id) {
-        Optional<User> existingUser = userService.findById(id);
 
-        return existingUser.map(u -> {
-            u.setPassword(user.getPassword());
-
-            User updatedUser = userService.update(u);
-
-            return ResponseEntity
-                    .ok()
-                    .eTag(Integer.toString(updatedUser.getVersion()))
-                    .location(URI.create(API_URL + "/" + u.getId()))
-                    .body(userAssembler.toModel(updatedUser));
-
-        }).orElse(ResponseEntity.notFound().build());
+        return userService.update(id, user).map(u -> ResponseEntity
+                .ok()
+                .eTag(Integer.toString(u.getVersion()))
+                .location(URI.create(API_URL + "/" + u.getId()))
+                .body(userAssembler.toModel(u)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<User>> deleteUser(@PathVariable String id) {
-        Optional<User> existingUser = userService.findById(id);
 
-        return existingUser.map(u -> {
-            userService.delete(id);
-            return ResponseEntity
-                    .ok()
-                    .body(userAssembler.toModel(u));
-
-        }).orElse(ResponseEntity.notFound().build());
+        return userService.delete(id).map(u -> ResponseEntity
+                .ok()
+                .body(userAssembler.toModel(u))).orElse(ResponseEntity.notFound().build());
     }
 }
