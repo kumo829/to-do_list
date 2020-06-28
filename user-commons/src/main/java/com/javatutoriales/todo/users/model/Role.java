@@ -1,4 +1,4 @@
-package com.javatutoriales.todo.userservice.model;
+package com.javatutoriales.todo.users.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

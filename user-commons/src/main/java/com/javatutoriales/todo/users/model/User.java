@@ -1,4 +1,4 @@
-package com.javatutoriales.todo.userservice.model;
+package com.javatutoriales.todo.users.model;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,9 +8,11 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

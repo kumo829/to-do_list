@@ -1,7 +1,7 @@
 package com.javatutoriales.todo.userservice.controller;
 
+import com.javatutoriales.todo.users.model.User;
 import com.javatutoriales.todo.userservice.controller.hateoas.UserResourceAssembler;
-import com.javatutoriales.todo.userservice.model.User;
 import com.javatutoriales.todo.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

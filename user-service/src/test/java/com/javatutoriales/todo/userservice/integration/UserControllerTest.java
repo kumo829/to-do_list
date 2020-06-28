@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.userservice.integration;
 
-import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.users.model.User;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoDataFile;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoSpringExtension;
 import org.junit.jupiter.api.DisplayName;

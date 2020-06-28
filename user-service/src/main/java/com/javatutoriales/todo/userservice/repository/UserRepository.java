@@ -1,8 +1,7 @@
 package com.javatutoriales.todo.userservice.repository;
 
-import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.users.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 
 import java.util.Optional;
 

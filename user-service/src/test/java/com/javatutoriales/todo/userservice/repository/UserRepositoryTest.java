@@ -1,7 +1,7 @@
 package com.javatutoriales.todo.userservice.repository;
 
-import com.javatutoriales.todo.userservice.model.Role;
-import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.users.model.Role;
+import com.javatutoriales.todo.users.model.User;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoDataFile;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoSpringExtension;
 import org.junit.jupiter.api.Disabled;
@@ -13,14 +13,11 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @ActiveProfiles("testing")
@@ -47,6 +44,7 @@ public class UserRepositoryTest {
         LocalDateTime now = LocalDateTime.now();
 
         Optional<Role> userRoleOptional = roleRepository.findByName("User");
+        assertThat(userRoleOptional).isPresent();
         Role userRole = userRoleOptional.get();
 
         User newUser = User.builder().username("newUser").email("user@mail.com").password("hasdifsdhf").version(1).build();
@@ -75,7 +73,7 @@ public class UserRepositoryTest {
         assertThat(users.get(0).getUsername()).isEqualTo("newUser");
         assertThat(users.get(0).getEmail()).isEqualTo("user@mail.com");
         assertThat(users.get(0).getRoles()).isNotNull().isNotEmpty().hasSize(1);
-        assertThat(users.get(0).getRoles().stream().toArray(Role[]::new)).isNotEmpty().hasSize(1);
+        assertThat(users.get(0).getRoles().toArray(new Role[0])).isNotEmpty().hasSize(1);
         System.out.println(users);
     }
 

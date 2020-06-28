@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.userservice.repository;
 
-import com.javatutoriales.todo.userservice.model.Role;
+import com.javatutoriales.todo.users.model.Role;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoDataFile;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoSpringExtension;
 import org.junit.jupiter.api.Disabled;

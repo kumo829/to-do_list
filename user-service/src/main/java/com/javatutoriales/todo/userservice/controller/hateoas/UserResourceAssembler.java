@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.userservice.controller.hateoas;
 
-import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.users.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

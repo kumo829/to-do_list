@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.userservice.service;
 
-import com.javatutoriales.todo.userservice.model.User;
+import com.javatutoriales.todo.users.model.User;
 import com.javatutoriales.todo.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
