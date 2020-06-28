@@ -10,6 +10,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<EntityModel<User>> createUser(@RequestBody User user) {
+    public ResponseEntity<EntityModel<User>> createUser(@RequestBody @Valid User user) {
         log.info("Creating new user: {}", user);
 
         User newUser = userService.save(user);
@@ -54,7 +55,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<User>> updateUser(@RequestBody User user, @PathVariable String id) {
+    public ResponseEntity<EntityModel<User>> updateUser(@RequestBody @Valid User user, @PathVariable String id) {
         Optional<User> existingUser = userService.findById(id);
 
         return existingUser.map(u -> {

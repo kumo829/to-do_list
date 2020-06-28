@@ -105,7 +105,7 @@ public class UserControllerTest {
     @Test
     @DisplayName("POST Add new User - SUCCESS")
     public void whenAddNewUser_thenOneUserOnDatabase() {
-        User postUser = User.builder().username("newPostUser").username("postuser@mail.com").password("avc123").build();
+        User postUser = User.builder().username("newPostUser").email("postuser@mail.com").password("avc123").build();
         LocalDateTime now = LocalDateTime.now();
 
         HttpEntity<User> request = new HttpEntity<>(postUser);
@@ -126,6 +126,7 @@ public class UserControllerTest {
         assertThat(dbUser).isNotNull();
         assertThat(dbUser.getUsername()).isEqualTo(user.getUsername());
         assertThat(dbUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(dbUser.getEmail()).isEqualTo(user.getEmail());
     }
 
     public MongoTemplate getMongoTemplate() {
