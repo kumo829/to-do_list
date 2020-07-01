@@ -1,0 +1,21 @@
+version: '3.7'
+
+networks:
+  userdb-cloud-network:
+#    driver: "bridge"
+
+services:
+  users-database:
+    image: mongo
+#    expose:
+#      - 27017
+    ports:
+      - 27017:27017
+      - 27018:27018
+      - 27019:27019
+    restart: always
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: root
+#      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - userdb-cloud-network

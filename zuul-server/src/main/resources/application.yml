@@ -21,3 +21,13 @@ eureka:
   client:
     serviceUrl:
       defaultZone: ${EUREKA_SERVER:http://eureka-server:8761/eureka/}
+zuul:
+  routes:
+    security:
+      service-id: oauth-service
+      path: /api/v1/security/**
+      sensitive-headers: Cookie, Set-Cookie
+
+    users:
+      service-id: user-service
+      path: /api/users/v1/**

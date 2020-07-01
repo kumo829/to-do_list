@@ -1,7 +1,6 @@
 spring:
   application:
-    name: zuul-server
-
+    name: oauth-service
   cloud:
     config:
       uri: ${CONFIG_SERVER:http://localhost:8888}
