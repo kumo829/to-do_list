@@ -1,6 +1,7 @@
 package com.javatutoriales.todo.oauthservice.services;
 
 import com.javatutoriales.todo.oauthservice.clients.UserClient;
+import com.javatutoriales.todo.oauthservice.security.token.UserTokenEnhanced;
 import com.javatutoriales.todo.users.model.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,14 +14,12 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, UserTokenEnhanced {
 
     private final UserClient userClient;
 
@@ -32,6 +31,11 @@ public class UserService implements UserDetailsService {
         return userClient.findByUsername(username)
                 .map(OauthUser::new)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
+    }
+
+    @Override
+    public User findByUsername(String username) throws UsernameNotFoundException {
+        return (User) loadUserByUsername(username);
     }
 
     private static class OauthUser extends User implements UserDetails {
