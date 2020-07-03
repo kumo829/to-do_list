@@ -1,69 +1,84 @@
+#  sudo docker-compose -f resources-compose.yml -f docker-compose.yml up
 #  sudo docker-compose -f zipkin-compose.yml -f resources-compose.yml -f docker-compose.yml up
 
 version: '3.7'
+
 networks:
   TO-DO-cloud-network:
+    driver: bridge
+  users-network:
+    driver: bridge
 
 services:
-
-  eureka-server:
-    image: todo-eureka-server:v1.0.0
-    ports:
-      - "8761:8761"
-    restart: always
-    networks:
-      - TO-DO-cloud-network
 
   config-server:
     image: todo-config-server:v1.0.0
     environment:
-      - SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME=
-      - SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD=
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_USERNAME=${GITHUB_USER}
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_PASSWORD=${GITHUB_PASS}
     ports:
-      - "8888:8888"
+      - 8888:8888
     restart: always
     networks:
       - TO-DO-cloud-network
 
-  zuul-server:
-    image: todo-zuul-server:v1.0.2
-    environment:
-      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+
+  eureka-server:
+    image: todo-eureka-server:v1.0.0
+    hostname: eureka-server
     ports:
-      - "8090:8090"
+      - 8761:8761
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+
+
+  zuul-server:
+    image: todo-zuul-server:v1.0.0
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+    #      - EUREKA_SERVER=http://eureka-server:8761/eureka #Not necessary here, this value is taking from config server
+    ports:
+      - 8090:8090
     restart: always
     networks:
       - TO-DO-cloud-network
     depends_on:
+      - config-server
       - eureka-server
 
-#  users-server:
-#    image: todo-user-service:v1.0.0
-#    environment:
-#      - CONFIG_SERVER=http://config-server:8888
-#      - EUREKA_SERVER=http://eureka-server:8761/eureka/
-#      - spring.data.mongodb.uri=mongodb://root:example@172.17.168.9:27017/test
-##      - MONGODB_USERS_HOST=docker_mongo
-##      - MONGODB_USERS_PORT=27017
-##      - MONGODB_USERNAME=root
-##      - MONGODB_PASSWORD=example
-#    restart: always
-#    networks:
-#      - mongo_net
-#      - TO-DO-cloud-network
-##    external_links:
-##      - userdb-cloud-network
-##      - users-database
-#    depends_on:
-#      - users-database
 
-#  oauth-service:
-#    image: todo-oauth-service:v1.0.0
-#    environment:
-#      - CONFIG_SERVER=http://config-server:8888
-#      - EUREKA_SERVER=http://eureka-server:8761/eureka/
-#    restart: always
-#    networks:
-#      - TO-DO-cloud-network
-##    depends_on:
-##      - users-server
+  users-service:
+    image: todo-user-service:v1.0.0
+    environment:
+#      - EUREKA_SERVER=http://eureka-server:8761/eureka #Not necessary here, this value is taking from config server
+      - CONFIG_SERVER=http://config-server:8888
+      - MONGO_DATABASE=users_db
+      - MONGODB_USERS_HOST=users_db
+      - MONGODB_USERS_PORT=27017
+      - MONGODB_USERNAME=testUser
+      - MONGODB_PASSWORD=pwd
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+      - users-network
+    links:
+      - users_db
+    depends_on:
+      - config-server
+      - eureka-server
+      - users_db
+
+
+  oauth-service:
+    image: todo-oauth-service:v1.0.0
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+#      - EUREKA_SERVER=http://eureka-server:8761/eureka #Not necessary here, this value is taking from config server
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+    depends_on:
+      - config-server
+      - eureka-server
+      - users-service

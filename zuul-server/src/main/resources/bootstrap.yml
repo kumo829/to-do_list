@@ -1,7 +1,13 @@
 spring:
   application:
     name: zuul-server
-
   cloud:
     config:
       uri: ${CONFIG_SERVER:http://localhost:8888}
+      enabled: true
+      fail-fast: true
+      retry:
+        initial-interval: 15000
+        max-attempts: 15
+        multiplier: 1.5
+        max-interval: 20000

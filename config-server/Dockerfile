@@ -1,3 +1,5 @@
+# sudo docker build -t todo-config-server:v1.0.0 .
+
 FROM openjdk:14.0.1-slim-buster
 VOLUME /tmp
 EXPOSE 8888

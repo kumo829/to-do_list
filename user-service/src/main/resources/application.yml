@@ -1,28 +1,12 @@
-server:
-  port: ${PORT:0}
-
 spring:
-  application:
-    name: user-service
-  hateoas:
-    use-hal-as-default-json-media-type: false
-  jackson:
-    default-property-inclusion: NON_ABSENT
-
   data:
     mongodb:
-      database: user_db
-      host: ${MONGODB_USERS_HOST:localhost}
+      database: ${MONGO_DATABASE}
+      host: ${MONGODB_USERS_HOST:172.20.155.178}
       port: ${MONGODB_USERS_PORT:27017}
-#      username: ${MONGODB_USERNAME:#{}}
-#      password: ${MONGODB_PASSWORD:#{}}
+      username: ${MONGODB_USERNAME:mongoadmin}
+      password: ${MONGODB_PASSWORD:secret}
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
-
-  instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
-
+  hateoas:
+    use-hal-as-default-json-media-type: false
 
