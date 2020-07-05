@@ -1,8 +1,8 @@
 package com.javatutoriales.todo.oauthservice.security;
 
 import com.javatutoriales.todo.oauthservice.security.token.UserTokenAditionalInfo;
-import com.javatutoriales.todo.oauthservice.security.token.UserTokenEnhanced;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import java.util.Arrays;
 
 @Configuration
+@RefreshScope
 @EnableAuthorizationServer
 @RequiredArgsConstructor
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -29,7 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private final UserTokenAditionalInfo userTokenEnhanced;
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
     }
@@ -45,7 +46,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
         tokenEnhancerChain.setTokenEnhancers(Arrays.asList(userTokenEnhanced, accessTokenConverter()));
