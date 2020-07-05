@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @FeignClient(name = "user-service")
 public interface UserClient {
-    @GetMapping("/api/v1/users/{username}")
+    @GetMapping("/v1/users/{username}")
     Optional<User> findByUsername(@PathVariable String username);
 }

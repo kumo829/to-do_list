@@ -25,6 +25,7 @@ public class UserTokenAditionalInfo implements TokenEnhancer {
 
         //TODO: Enhance with name of the user
         aditionalInfo.put("email", user.getEmail());
+        aditionalInfo.put("name", user.getName());
 
         ((DefaultOAuth2AccessToken)accessToken).setAdditionalInformation(aditionalInfo);
 

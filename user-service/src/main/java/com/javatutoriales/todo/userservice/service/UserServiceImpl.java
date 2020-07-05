@@ -1,8 +1,12 @@
 package com.javatutoriales.todo.userservice.service;
 
+import com.javatutoriales.todo.users.model.Role;
 import com.javatutoriales.todo.users.model.User;
+import com.javatutoriales.todo.userservice.repository.RoleRepository;
 import com.javatutoriales.todo.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,6 +16,10 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private static final String CLIENT_ROLE_NAME = "User";
 
     @Override
     public Iterable<User> findAll() {
@@ -32,7 +40,14 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         user.setVersion(1);
 
-        return userRepository.save(user);
+        Optional<Role> clientRole = roleRepository.findByName(CLIENT_ROLE_NAME);
+
+        return clientRole.map(role -> {
+            user.addRole(role);
+            user.setEnabled(true); //TODO: Temporal enabling on enroll, will be replaced with email confirmation
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        }).orElseThrow(IllegalStateException::new);
     }
 
     @Override

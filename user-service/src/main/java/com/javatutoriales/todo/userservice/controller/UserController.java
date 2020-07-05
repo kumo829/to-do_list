@@ -20,13 +20,13 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/v1/users") //TODO: Update route in zuul server
+@RequestMapping("/v1/users") //TODO: Update route in zuul server
 @RequiredArgsConstructor
 @Slf4j
 @Api(description = "Users management operations.", tags = {"User service"}, produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
-    private static final String API_URL = "/api/v1/users";
+    private static final String API_URL = "/v1/users";
 
     private final UserService userService;
     private final UserResourceAssembler userAssembler;
@@ -63,7 +63,7 @@ public class UserController {
         User newUser = userService.save(user);
 
         return ResponseEntity
-                .created(URI.create(API_URL + "/" + newUser.getId()))
+                .created(URI.create(API_URL + "/" + newUser.getUsername()))
                 .eTag(Integer.toString(newUser.getVersion()))
                 .body(userAssembler.toModel(newUser));
     }

@@ -7,6 +7,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -42,11 +43,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+//        @formatter:off
         http.authorizeRequests()
                 .antMatchers("/api/security/v1/oauth/**").permitAll()
-                .antMatchers("/api/**/v1/**").hasAnyRole("Administrator")
+                .antMatchers(HttpMethod.POST, "/api/users/v1/users").permitAll()
+                .antMatchers("/api/**/").hasAnyRole("Administrator")
                 .anyRequest().authenticated()
             .and().cors().configurationSource(corsConfigurationSource());
+//        @formatter:on
     }
 
     @Bean
@@ -69,7 +73,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
 
     @Bean
-    protected FilterRegistrationBean<CorsFilter> corsFilter(){
+    protected FilterRegistrationBean<CorsFilter> corsFilter() {
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource()));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
