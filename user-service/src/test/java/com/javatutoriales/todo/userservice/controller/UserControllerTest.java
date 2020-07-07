@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
-    private static final String API_URL = "/api/v1/users";
+    private static final String API_URL = "/v1/users";
 
     @Mock
     UserService userService;
@@ -146,7 +146,7 @@ public class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + uuid))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/new_user"))
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(postUser.getUsername())))
 

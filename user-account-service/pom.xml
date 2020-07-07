@@ -8,34 +8,33 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.javatutoriales.todo.oauth-service</groupId>
-    <artifactId>oauth-service</artifactId>
+    <artifactId>user-account-service</artifactId>
     <version>1.0.0</version>
-    <name>oauth-service</name>
-    <description>Oauth Service for TO-DO list project</description>
-
-    <properties>
-        <java.version>14</java.version>
-        <spring-cloud.version>Hoxton.SR6</spring-cloud.version>
-    </properties>
+    <name>user-account-service</name>
+    <description>Account creation micro-service for TO-DO lists project</description>
 
     <dependencies>
         <dependency>
             <groupId>com.javatutoriales.todolist</groupId>
             <artifactId>user-commons</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>

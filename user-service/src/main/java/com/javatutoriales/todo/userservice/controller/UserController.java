@@ -14,11 +14,14 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import java.net.URI;
 
+@Validated
 @RestController
 @RequestMapping("/v1/users") //TODO: Update route in zuul server
 @RequiredArgsConstructor
@@ -45,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<EntityModel<User>> getUser(@PathVariable("username") String username) {
+    public ResponseEntity<EntityModel<User>> getUser(@PathVariable("username") @NotEmpty String username) {
 
         log.info("/users/{}", username);
 
