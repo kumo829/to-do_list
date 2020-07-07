@@ -21,20 +21,21 @@ import java.util.Set;
 @Document(collection = "users")
 public class User {
     @Id
+    @Null
     private String id;
 
     @Version
+    @Null
     private int version;
 
     @NotEmpty
-    @Size(max = 100)
+    @Size(max = 50)
     private String name;
 
-    @NotBlank
+    @NotEmpty
     @Size(max = 50)
-    @Indexed(unique = true, name = "user_username_index_unique")
-    @Setter(AccessLevel.PRIVATE)
-    private String username;
+    private String lastName;
+
 
     @NotBlank
     @Size(max = 50)
@@ -44,15 +45,23 @@ public class User {
     private String email;
 
     @NotBlank
+    @Size(max = 50)
+    @Email
+    @Setter(AccessLevel.PRIVATE)
+    private boolean emailVerified;
+
+    @NotBlank
     @Size(max = 60)
     private String password;
 
     private boolean enabled;
 
     @CreatedDate
+    @Null
     private LocalDateTime createdDate;
 
     @LastModifiedDate
+    @Null
     private LocalDateTime modifiedDate;
 
     @DBRef
@@ -61,7 +70,8 @@ public class User {
     public User(@NotNull User user) {
         this.id = user.id;
         this.version = user.version;
-        this.username = user.username;
+        this.name = user.name;
+        this.lastName = user.lastName;
         this.email = user.email;
         this.password = user.password;
         this.enabled = user.enabled;
@@ -70,9 +80,9 @@ public class User {
         this.roles = user.roles;
     }
 
-    public User(String id, @NotBlank @Size(max = 20) String username) {
+    public User(String id, @NotBlank @Size(max = 50) String email) {
         this.id = id;
-        this.username = username;
+        this.email = email;
     }
 
     public void addRole(@NotNull Role role) {
