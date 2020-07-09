@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: openjdk-14-boot-buster
+      - image: openjdk:14.0.1-slim-buster
     steps: # a collection of executable commands
       - checkout # check out source code to working directory
       - run: mvn package # run the actual tests
