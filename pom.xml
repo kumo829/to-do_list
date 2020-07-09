@@ -13,6 +13,7 @@
 
     <modules>
         <module>user-service</module>
+        <module>test-utils</module>
     </modules>
 
     <groupId>com.javatutoriales.todolist</groupId>
