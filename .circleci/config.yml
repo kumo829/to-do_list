@@ -3,12 +3,15 @@ version: 2.1
 orbs:
   maven: circleci/maven@0.0.12
 
+jobs:
+  build:
+    docker:
+      - image: openjdk-14-boot-buster
+
+
+
 workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
-      build:
-        docker:
-          - image: openjdk-14-boot-buster
-
 

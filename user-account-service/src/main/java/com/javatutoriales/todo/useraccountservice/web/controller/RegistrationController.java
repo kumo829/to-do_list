@@ -1,5 +1,7 @@
 package com.javatutoriales.todo.useraccountservice.web.controller;
 
+import com.javatutoriales.todo.useraccountservice.services.RegistrationService;
+import com.javatutoriales.todo.users.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -18,8 +20,11 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class RegistrationController {
+
+    private final RegistrationService registrationService;
+
     @PostMapping
-    Optional<User> registerUser(@RequestBody @Valid User user){
+    Optional<User> registerUser(@RequestBody @Valid UserDto user){
         return null;
     }
 
