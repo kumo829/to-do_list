@@ -100,7 +100,7 @@ public class UserControllerTest {
 
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
                 .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + user2.getId()))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + user2.getUsername()))
 
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").isNotEmpty())

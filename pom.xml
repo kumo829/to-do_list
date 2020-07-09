@@ -12,6 +12,7 @@
     </parent>
 
     <modules>
+        <module>user-commons</module>
         <module>user-service</module>
     </modules>
 
