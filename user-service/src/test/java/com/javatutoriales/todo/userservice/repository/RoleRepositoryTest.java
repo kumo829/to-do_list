@@ -3,15 +3,23 @@ package com.javatutoriales.todo.userservice.repository;
 import com.javatutoriales.todo.users.model.Role;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoDataFile;
 import com.javatutoriales.todo.userservice.repository.mongo.MongoSpringExtension;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.mongodb.client.MongoClient;
+import de.flapdoodle.embed.mongo.Command;
+import de.flapdoodle.embed.mongo.MongodExecutable;
+import de.flapdoodle.embed.mongo.MongodProcess;
+import de.flapdoodle.embed.mongo.MongodStarter;
+import de.flapdoodle.embed.mongo.config.*;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.config.IRuntimeConfig;
+import de.flapdoodle.embed.process.runtime.Network;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DataMongoTest
-@ActiveProfiles("testing")
+@ActiveProfiles("test")
 @ExtendWith(MongoSpringExtension.class)
 public class RoleRepositoryTest {
 
@@ -32,6 +40,34 @@ public class RoleRepositoryTest {
     public MongoTemplate getMongoTemplate() {
         return mongoTemplate;
     }
+
+//    private static MongodExecutable mongodExecutable = null;
+//
+//    @AfterEach
+//    void clean() {
+//        mongodExecutable.stop();
+//    }
+//
+//    @BeforeEach
+//    void setup() throws Exception {
+//        String ip = "localhost";
+//        int port = 27017;
+//
+//        IMongodConfig mongodConfig = new MongodConfigBuilder().version(Version.Main.PRODUCTION)
+//                .net(new Net(ip, port, Network.localhostIsIPv6()))
+//                .build();
+//
+//        MongodStarter starter = MongodStarter.getDefaultInstance();
+//        mongodExecutable = starter.prepare(mongodConfig);
+//        mongodExecutable.start();
+//        mongoTemplate = new MongoTemplate(new MongoClient(ip, port), "test");
+//    }
+//
+//    @AfterAll
+//    public static void tearDown() {
+//        if (mongodExecutable != null)
+//            mongodExecutable.stop();
+//    }
 
     @Test
     @DisplayName("Save Role - SUCCESS")

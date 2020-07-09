@@ -32,6 +32,10 @@ public class Role {
     @Indexed(unique = true, name = "role_name_index_unique")
     private String name;
 
+    @NotBlank
+    @Size(max = 20)
+    private String displayName;
+
     @CreatedDate
     private LocalDateTime createdDate;
 

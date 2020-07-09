@@ -1,11 +1,13 @@
 spring:
+
   data:
     mongodb:
-      database: ${MONGO_DATABASE}
-      host: ${MONGODB_USERS_HOST:172.20.155.178}
-      port: ${MONGODB_USERS_PORT:27017}
-      username: ${MONGODB_USERNAME:mongoadmin}
-      password: ${MONGODB_PASSWORD:secret}
+      uri: mongodb://${MONGODB_USERNAME:testUser}:${MONGODB_PASSWORD:pwd}@${MONGODB_USERS_HOST:172.30.95.211}:${MONGODB_USERS_PORT:27017}/${MONGO_DATABASE:users_db}
+#      database: ${MONGO_DATABASE:users_db}
+#      host: ${MONGODB_USERS_HOST:172.30.95.211}
+#      port: ${MONGODB_USERS_PORT:27017}
+#      username: ${MONGODB_USERNAME:testUser}
+#      password: ${MONGODB_PASSWORD:pwd}
 
   hateoas:
     use-hal-as-default-json-media-type: false

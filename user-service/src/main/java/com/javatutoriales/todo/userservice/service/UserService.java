@@ -1,19 +1,20 @@
 package com.javatutoriales.todo.userservice.service;
 
-import com.javatutoriales.todo.users.model.User;
+
+import com.javatutoriales.todo.users.dto.UserDto;
 
 import java.util.Optional;
 
 public interface UserService {
-    Iterable<User> findAll();
+    Iterable<UserDto> findAll();
 
-    Optional<User> findByUsername(String username);
+    Optional<UserDto> findByUsername(String username);
 
-    Optional<User> findById(String id);
+    Optional<UserDto> findById(String id);
 
-    User save(User user);
+    UserDto save(UserDto user);
 
-    Optional<User> update(String userId, User user);
+    Optional<UserDto> update(String userId, UserDto user);
 
-    Optional<User> delete(String id);
+    Optional<UserDto> delete(String id);
 }

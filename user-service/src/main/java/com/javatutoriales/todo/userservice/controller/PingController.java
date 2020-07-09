@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/ping")
 public class PingController {
-    @Value("${service.version}")
+    @Value("${service.version:1.0.0}")
     private String serviceVersion;
 
     @GetMapping

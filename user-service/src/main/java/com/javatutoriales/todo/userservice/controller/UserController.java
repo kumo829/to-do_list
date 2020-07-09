@@ -1,5 +1,6 @@
 package com.javatutoriales.todo.userservice.controller;
 
+import com.javatutoriales.todo.users.dto.UserDto;
 import com.javatutoriales.todo.users.model.User;
 import com.javatutoriales.todo.userservice.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.userservice.service.UserService;
@@ -23,7 +24,7 @@ import java.net.URI;
 
 @Validated
 @RestController
-@RequestMapping("/v1/users") //TODO: Update route in zuul server
+@RequestMapping("/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 @Api(description = "Users management operations.", tags = {"User service"}, produces = MediaTypes.HAL_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -43,27 +44,27 @@ public class UserController {
             @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
             @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
     })
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUsers() {
+    public ResponseEntity<CollectionModel<EntityModel<UserDto>>> getUsers() {
         return ResponseEntity.ok(userAssembler.toCollectionModel(userService.findAll()));
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<EntityModel<User>> getUser(@PathVariable("username") @NotEmpty String username) {
+    public ResponseEntity<EntityModel<UserDto>> getUser(@PathVariable("username") @NotEmpty String username) {
 
         log.info("/users/{}", username);
 
         return userService.findByUsername(username).map(user -> ResponseEntity
                 .ok()
                 .eTag(Integer.toString(user.getVersion()))
-                .location(URI.create(API_URL + "/" + user.getId()))
+                .location(URI.create(API_URL + "/" + user.getUsername()))
                 .body(userAssembler.toModel(user))).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<EntityModel<User>> createUser(@RequestBody @Valid User user) {
+    public ResponseEntity<EntityModel<UserDto>> createUser(@RequestBody @Valid UserDto user) {
         log.info("Creating new user: {}", user);
 
-        User newUser = userService.save(user);
+        UserDto newUser = userService.save(user);
 
         return ResponseEntity
                 .created(URI.create(API_URL + "/" + newUser.getUsername()))
@@ -72,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<User>> updateUser(@RequestBody @Valid User user, @PathVariable String id) {
+    public ResponseEntity<EntityModel<UserDto>> updateUser(@RequestBody @Valid UserDto user, @PathVariable String id) {
 
         return userService.update(id, user).map(u -> ResponseEntity
                 .ok()
@@ -83,7 +84,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EntityModel<User>> deleteUser(@PathVariable String id) {
+    public ResponseEntity<EntityModel<UserDto>> deleteUser(@PathVariable String id) {
 
         return userService.delete(id).map(u -> ResponseEntity
                 .ok()

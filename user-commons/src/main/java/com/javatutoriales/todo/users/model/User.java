@@ -26,7 +26,7 @@ public class User {
 
     @Version
     @Null
-    private int version;
+    private Integer version;
 
     @NotEmpty
     @Size(max = 50)
@@ -36,6 +36,11 @@ public class User {
     @Size(max = 50)
     private String lastName;
 
+    @NotBlank
+    @Size(max = 50)
+    @Indexed(unique = true, name = "user_username_index_unique")
+    @Setter(AccessLevel.PRIVATE)
+    private String username;
 
     @NotBlank
     @Size(max = 50)
@@ -44,10 +49,7 @@ public class User {
     @Indexed(unique = true, name = "user_email_index_unique", useGeneratedName = true)
     private String email;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
-    @Setter(AccessLevel.PRIVATE)
+
     private boolean emailVerified;
 
     @NotBlank
@@ -70,6 +72,7 @@ public class User {
     public User(@NotNull User user) {
         this.id = user.id;
         this.version = user.version;
+        this.username = user.username;
         this.name = user.name;
         this.lastName = user.lastName;
         this.email = user.email;
@@ -80,9 +83,9 @@ public class User {
         this.roles = user.roles;
     }
 
-    public User(String id, @NotBlank @Size(max = 50) String email) {
+    public User(String id, @NotBlank @Size(max = 20) String username) {
         this.id = id;
-        this.email = email;
+        this.username = username;
     }
 
     public void addRole(@NotNull Role role) {

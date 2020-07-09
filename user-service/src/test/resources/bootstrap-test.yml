@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER:http://localhost:1234}
+      enabled: false
+      failFast: true
+      retry:
+        initial-interval: 10000
+        maxAttempts: 15
+        multiplier: 1.5
+        max-interval: 20000

@@ -1,11 +1,13 @@
 [
   {
     "id": "e140057d-a6b6-437c-89be-8ab7b7a25572",
-    "version": 1,
+    "name": "user",
+    "lastName": "lastName",
     "username": "newUser",
     "email": "user@mail.com",
-    "password": "hasdifsdhf",
+    "emailVerified": true,
     "enabled": true,
+    "password": "hasdifsdhf",
     "createdDate": "2020-06-26 22:47:21.257Z",
     "modifiedDate": "2020-06-26 22:47:21.257Z",
     "roles": [
@@ -20,11 +22,13 @@
   },
   {
     "id": "cdab060e-3bf8-4187-ba12-8b27fb1b4aed",
-    "version": 3,
     "username": "otherUser",
+    "name": "user",
+    "lastName": "lastName",
+    "emailVerified": true,
+    "enabled": true,
     "email": "otheruser@mail.com",
     "password": "hasdifsdhf",
-    "enabled": true,
     "createdDate": "2020-06-26 22:47:21.257Z",
     "modifiedDate": "2020-06-26 22:47:21.257Z",
     "roles": [
@@ -39,11 +43,13 @@
   },
   {
     "id": "9296dbb7-3049-4f65-8fa7-9fcdc62a56a8",
-    "version": 2,
     "username": "admin",
+    "name": "user",
+    "lastName": "lastName",
+    "emailVerified": true,
+    "enabled": true,
     "email": "admin@domail.com",
     "password": "abc213",
-    "enabled": true,
     "createdDate": "2020-06-26 22:47:21.257Z",
     "modifiedDate": "2020-06-26 22:47:21.257Z",
     "roles": [
@@ -58,9 +64,12 @@
   },
   {
     "id": "97a4363a-f269-48ac-982e-c1a282474ba0",
-    "version": 2,
     "username": "adminanduser",
     "email": "adminanduser@domail.com",
+    "name": "user",
+    "lastName": "lastName",
+    "emailVerified": true,
+    "enabled": true,
     "password": "abc213",
     "enabled": true,
     "createdDate": "2020-06-26 22:47:21.257Z",

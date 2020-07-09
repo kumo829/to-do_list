@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService, UserTokenEnhanced {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.debug("Searching for user {}", username);
+        log.info("Searching for user {}", username);
 
         return userClient.findByUsername(username)
                 .map(OauthUser::new)
@@ -42,6 +42,7 @@ public class UserService implements UserDetailsService, UserTokenEnhanced {
 
         public OauthUser(@NotNull User user) {
             super(user);
+            log.info("USer: {}", user);
         }
 
         @Override

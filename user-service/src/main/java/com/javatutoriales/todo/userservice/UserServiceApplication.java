@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
-@EntityScan({"com.javatutoriales.todo.users.model"})
-@SpringBootApplication
+
+@SpringBootApplication(scanBasePackages = {"com.javatutoriales.todo.userservice", "com.javatutoriales.todo.users"})
 @EnableMongoAuditing
 public class UserServiceApplication {
 

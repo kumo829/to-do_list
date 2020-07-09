@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.userservice.controller;
 
-import com.javatutoriales.todo.users.model.User;
+import com.javatutoriales.todo.users.dto.UserDto;
 import com.javatutoriales.todo.userservice.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.userservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
@@ -50,9 +52,9 @@ public class UserControllerTest {
 
     private MockMvc mockMvc;
 
-    private User user1;
-    private User user2;
-    private User user3;
+    private UserDto user1;
+    private UserDto user2;
+    private UserDto user3;
 
     @BeforeEach
     void setUp() {
@@ -61,9 +63,9 @@ public class UserControllerTest {
                 .build();
 
 
-        user1 = User.builder().id("123").username("user1").email("user1@mail.com").build();
-        user2 = User.builder().id("ABC").username("user2").email("user2@mail.com").version(1).build();
-        user3 = User.builder().id("AB123").username("user3").email("user3@mail.com").build();
+        user1 = UserDto.builder().id("123").username("user1").email("user1@mail.com").build();
+        user2 = UserDto.builder().id("ABC").username("user2").email("user2@mail.com").version(1).build();
+        user3 = UserDto.builder().id("AB123").username("user3").email("user3@mail.com").build();
     }
 
     @Test
@@ -91,9 +93,9 @@ public class UserControllerTest {
     @Test
     @DisplayName("GET /users/user1 - FOUND")
     public void whenGetSingleUserByUsename_thenFoundUser() throws Exception {
-        given(userService.findByUsername(user2.getId())).willReturn(Optional.of(user2));
+        given(userService.findByUsername(user2.getUsername())).willReturn(Optional.of(user2));
 
-        mockMvc.perform(get(API_URL + "/{username}", user2.getId()).accept(MediaTypes.HAL_JSON_VALUE))
+        mockMvc.perform(get(API_URL + "/{username}", user2.getUsername()).accept(MediaTypes.HAL_JSON_VALUE))
                 .andExpect(status().isOk())
 
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
@@ -136,8 +138,8 @@ public class UserControllerTest {
     public void whenNewUser_thenNewRecordCreated() throws Exception {
 
         String uuid = UUID.randomUUID().toString();
-        User postUser = User.builder().username("new_user").email("new_user@mail.com").password("asdf").build();
-        User mockUser = User.builder().id(uuid).username("new_user").email("new_user@mail.com").version(1).build();
+        UserDto postUser = UserDto.builder().username("new_user").name("new").lastName("user").email("new_user@mail.com").password("asdf").passwordConfirmation("asdf").build();
+        UserDto mockUser = UserDto.builder().id(uuid).username("new_user").email("new_user@mail.com").version(1).build();
 
         given(userService.save(any())).willReturn(mockUser);
 
@@ -146,7 +148,7 @@ public class UserControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/new_user"))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/new_user"  ))
                 .andExpect(jsonPath("$.id", is(uuid)))
                 .andExpect(jsonPath("$.username", is(postUser.getUsername())))
 
@@ -161,9 +163,8 @@ public class UserControllerTest {
     public void whenUserUpdate_thenRecordUpdated() throws Exception {
         String uuid = UUID.randomUUID().toString();
 
-        User putUser = User.builder().username("updated_user").password("qwert").email("updated_user@mail.com").build();
-        User mockUser = new User(uuid, "updated_user");
-        User updatedUser = new User(uuid, "updated_user");
+        UserDto putUser = UserDto.builder().username("updated_user").password("qwert").passwordConfirmation("qwert").name("updated").lastName("user").email("updated_user@mail.com").build();
+        UserDto updatedUser = UserDto.builder().id(uuid).username("updated_user").build();
         updatedUser.setVersion(2);
 
         //given(userService.findById(uuid)).willReturn(Optional.of(mockUser));

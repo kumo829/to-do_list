@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,7 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-@ActiveProfiles("testing")
+@ActiveProfiles("test")
 @ExtendWith(MongoSpringExtension.class)
 public class UserRepositoryTest {
 
@@ -47,7 +49,7 @@ public class UserRepositoryTest {
         assertThat(userRoleOptional).isPresent();
         Role userRole = userRoleOptional.get();
 
-        User newUser = User.builder().username("newUser").email("user@mail.com").password("hasdifsdhf").version(1).build();
+        User newUser = User.builder().username("newUser").email("user@mail.com").password("hasdifsdhf").build();
 
         newUser.addRole(userRole);
 

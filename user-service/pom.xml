@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>user-service</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>user-service</name>
     <description>User management service for TO-DO list project</description>
 
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.javatutoriales.todolist</groupId>
             <artifactId>user-commons</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>org.atteo</groupId>
@@ -109,7 +109,12 @@
             <artifactId>springfox-bean-validators</artifactId>
             <version>${swagger.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>2.2.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
