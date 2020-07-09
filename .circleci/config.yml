@@ -1,17 +1,18 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@0.0.12
+#orbs:
+#  maven: circleci/maven@0.0.12
 
 jobs:
   build:
     docker:
       - image: openjdk-14-boot-buster
+    steps: # a collection of executable commands
+      - checkout # check out source code to working directory
+      - run: mvn package # run the actual tests
 
-
-
-workflows:
-  maven_test:
-    jobs:
-      - maven/test # checkout, build, test, and upload test results
+#workflows:
+#  maven_test:
+#    jobs:
+#      - maven/test # checkout, build, test, and upload test results
 
