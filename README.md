@@ -20,4 +20,10 @@ The initial version of the architecture will include a lot of Spring Cloud compo
 The architecture proposes a series of microservices and three applications, a mobile app developed using Xamarin.Forms, an admin website and a client´s web app.
 
 ![Architecture](./img/Backend_Detailed_Architecture.png)
-    
+
+### Modules
+
+ - **Oauth Service**: Service to perform Authentication and Authorization.
+ - **User Commons**: Entity and DTO classes used to carrying out user information between services and mapping between both kind of classes, using Mapstruct.
+ - **User Service**: Internal service used to manage User's information.
+ - **Test Utils**: Utilities classes used in testing among the different services.
