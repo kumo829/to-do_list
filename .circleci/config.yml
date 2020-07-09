@@ -7,5 +7,8 @@ workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
+      build:
+        docker:
+          - image: openjdk-14-boot-buster
 
 
