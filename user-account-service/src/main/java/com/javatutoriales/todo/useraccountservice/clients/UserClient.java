@@ -1,5 +1,6 @@
 package com.javatutoriales.todo.useraccountservice.clients;
 
+import com.javatutoriales.todo.users.dto.UserDto;
 import com.javatutoriales.todo.users.model.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,8 +17,8 @@ public interface UserClient {
     String USERS_SERVICE_PATH = "/v1/users/";
 
     @GetMapping(USERS_SERVICE_PATH + "{username}")
-    Optional<User> findByUsername(@PathVariable String username);
+    Optional<UserDto> findByUsername(@PathVariable String username);
 
     @PostMapping(USERS_SERVICE_PATH)
-    Optional<User> saveUser(@RequestBody User user);
+    Optional<UserDto> saveUser(@RequestBody User user);
 }
