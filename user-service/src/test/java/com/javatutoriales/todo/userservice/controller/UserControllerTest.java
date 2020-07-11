@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.javatutoriales.todo.userservice.TestUtils.asJsonString;
-import static com.javatutoriales.todo.userservice.TestUtils.jackson2HttpMessageConverter;
+import static com.javatutoriales.todolist.testutils.TestUtils.asJsonString;
+import static com.javatutoriales.todolist.testutils.TestUtils.jackson2HttpMessageConverter;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;

@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    discovery:
+      enabled: false
+  hateoas:
+    use-hal-as-default-json-media-type: false
+
+
+eureka:
+  client:
+    enabled: false

@@ -1,7 +1,7 @@
 package com.javatutoriales.todo.userservice.repository.mongo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.javatutoriales.todo.userservice.TestUtils;
+import com.javatutoriales.todolist.testutils.TestUtils;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;

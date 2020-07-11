@@ -1,19 +1,16 @@
-package com.javatutoriales.todo.userservice;
+package com.javatutoriales.todolist.testutils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtils {
     private static ObjectMapper objectMapper;
 
@@ -39,7 +36,7 @@ public class TestUtils {
         return new MappingJackson2HttpMessageConverter(objectMapper);
     }
 
-    public static final String asJsonString(final Object obj) {
+    public static String asJsonString(final Object obj) {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.javatutoriales.todo.users.dto;
 
+import com.javatutoriales.todo.users.validations.PasswordsMatch;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@PasswordsMatch
 public class UserDto {
     @Null
     private String id;

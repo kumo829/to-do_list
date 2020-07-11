@@ -70,6 +70,18 @@ services:
       - users_db
 
 
+  users-account-service:
+    image: todo-user-account-service:v1.0.0
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+    depends_on:
+      - config-server
+      - eureka-server
+
+
   oauth-service:
     image: todo-oauth-service:v1.0.0
     environment:
