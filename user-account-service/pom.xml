@@ -13,6 +13,11 @@
     <name>user-account-service</name>
     <description>Account creation micro-service for TO-DO lists project</description>
 
+    <properties>
+
+        <maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.javatutoriales.todolist</groupId>
@@ -61,9 +66,31 @@
         <dependency>
             <groupId>com.javatutoriales.todolist</groupId>
             <artifactId>test-utils</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

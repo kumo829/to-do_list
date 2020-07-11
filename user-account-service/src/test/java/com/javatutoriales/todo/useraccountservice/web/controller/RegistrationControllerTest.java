@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.useraccountservice.web.controller;
 
-import com.javatutoriales.todo.useraccountservice.UserService;
+import com.javatutoriales.todo.useraccountservice.services.UserService;
 import com.javatutoriales.todo.useraccountservice.web.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.users.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,6 +92,7 @@ class RegistrationControllerTest {
                         () -> assertThat(result.getResolvedException().getMessage(), containsString("passwordConfirmation")),
                         () -> assertThat(result.getResolvedException().getMessage(), containsString("name")),
                         () -> assertThat(result.getResolvedException().getMessage(), containsString("lastName")),
+                        () -> assertThat(result.getResolvedException().getMessage(), containsString("email")),
                         () -> assertThat(result.getResolvedException().getMessage(), containsString("email")),
                         () -> assertThat(result.getResolvedException().getMessage(), not(containsString("version"))),
                         () -> assertThat(result.getResolvedException().getMessage(), not(containsString("enabled"))),

@@ -1,6 +1,6 @@
 package com.javatutoriales.todo.useraccountservice.web.controller;
 
-import com.javatutoriales.todo.useraccountservice.UserService;
+import com.javatutoriales.todo.useraccountservice.services.UserService;
 import com.javatutoriales.todo.useraccountservice.web.controller.hateoas.UserResourceAssembler;
 import com.javatutoriales.todo.users.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +29,13 @@ public class RegistrationController {
     private final UserResourceAssembler userAssembler;
 
     @PostMapping
-    public ResponseEntity<EntityModel<UserDto>> registerUser(@RequestBody @Validated UserDto user){
+    public ResponseEntity<EntityModel<UserDto>> registerUser(@RequestBody @Validated UserDto user) {
 
         UserDto newUser = userService.registerUser(user);
 
         return ResponseEntity.created(URI.create(API_URL + "/" + newUser.getUsername()))
                 .eTag(Integer.toString(newUser.getVersion()))
-                    .body(userAssembler.toModel(newUser));
+                .body(userAssembler.toModel(newUser));
     }
 
 }

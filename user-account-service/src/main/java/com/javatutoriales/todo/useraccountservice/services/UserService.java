@@ -1,4 +1,4 @@
-package com.javatutoriales.todo.useraccountservice;
+package com.javatutoriales.todo.useraccountservice.services;
 
 import com.javatutoriales.todo.users.dto.UserDto;
 
