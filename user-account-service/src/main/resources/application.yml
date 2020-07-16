@@ -1,1 +1,5 @@
-
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${MONGODB_USERNAME:testUser}:${MONGODB_PASSWORD:pwd}@${MONGODB_USERS_HOST:172.30.95.211}:${MONGODB_USERS_PORT:27017}/${MONGO_DATABASE:tokens_db}
+  #      database: ${MONGO_DATABASE:users_db}

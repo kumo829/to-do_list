@@ -2,17 +2,25 @@ package com.javatutoriales.todo.useraccountservice.integration;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
+import com.javatutoriales.todo.useraccountservice.integration.mongo.MongoSpringExtension;
 import com.javatutoriales.todo.users.dto.UserDto;
 import com.javatutoriales.todolist.testutils.wiremock.LocalRibbonClientConfiguration;
 import com.javatutoriales.todolist.testutils.wiremock.WireMockInitializer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,6 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = {WireMockInitializer.class}, classes = {LocalRibbonClientConfiguration.class})
+@AutoConfigureMockMvc
 public class RegistrationControllerIT {
 
     private static final String DOMAIN = "http://localhost";
@@ -39,8 +48,15 @@ public class RegistrationControllerIT {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @LocalServerPort
     private Integer port;
+
+    @Mock
+    ApplicationEventPublisher eventPublisher;
+
 
     @AfterEach
     public void afterEach() {
@@ -51,7 +67,7 @@ public class RegistrationControllerIT {
     @DisplayName("POST register user - SUCCESS")
     void whenRegisterNewUser_thenUserHasIs() {
 
-        UserDto postUser = UserDto.builder().username("newPostUser").name("new").lastName("user").email("postuser@mail.com").password("avc123").passwordConfirmation("avc123").build();
+        UserDto postUser = UserDto.builder().username("newPostUser").name("new").lastName("user").email("amonmar2000@hotmail.com").password("avc123").passwordConfirmation("avc123").build();
         LocalDateTime now = LocalDateTime.now();
 
         UserDto userReponse = UserDto.builder().id(UUID.randomUUID().toString()).username("newPostUser").name("new").lastName("user").email("postuser@mail.com").password("avc123").passwordConfirmation("avc123").version(1).createdDate(now).modifiedDate(now).build();
@@ -81,5 +97,7 @@ public class RegistrationControllerIT {
         assertThat(user.getUsername()).isEqualTo("newPostUser");
     }
 
-
+    public MongoTemplate getMongoTemplate() {
+        return mongoTemplate;
+    }
 }

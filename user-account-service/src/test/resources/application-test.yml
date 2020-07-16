@@ -1,11 +1,33 @@
+server:
+  port: ${PORT:0}
+
 spring:
   cloud:
     discovery:
       enabled: false
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test_db
   hateoas:
     use-hal-as-default-json-media-type: false
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: programadorjavablog@gmail.com
+    password: amontoya
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          starttls:
+            required: true
+            enable: true
+    protocol: smtp
+    test-connection: false
 
 eureka:
   client:
     enabled: false
+

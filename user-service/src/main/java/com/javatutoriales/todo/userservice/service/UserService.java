@@ -17,4 +17,6 @@ public interface UserService {
     Optional<UserDto> update(String userId, UserDto user);
 
     Optional<UserDto> delete(String id);
+
+    Optional<UserDto> verifyUser(String username);
 }

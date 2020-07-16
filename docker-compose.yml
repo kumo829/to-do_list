@@ -8,6 +8,8 @@ networks:
     driver: bridge
   users-network:
     driver: bridge
+  verification_tokens-network:
+    driver: bridge
 
 services:
 
@@ -74,12 +76,23 @@ services:
     image: todo-user-account-service:v1.0.0
     environment:
       - CONFIG_SERVER=http://config-server:8888
+      - MONGO_DATABASE=verification_tokens_db
+      - MONGODB_USERS_HOST=verification_tokens_db
+      - MONGODB_USERS_PORT=27017
+      - MONGODB_USERNAME=testUser
+      - MONGODB_PASSWORD=pwd
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_HOST=${EMAIL_HOST}
     restart: always
     networks:
       - TO-DO-cloud-network
+      - verification_tokens-network
     depends_on:
       - config-server
       - eureka-server
+      - users-service
+      - verification_tokens_db
 
 
   oauth-service:

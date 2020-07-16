@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -47,10 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> findById(String id) {
-        return userRepository.findById(id).map(user -> {
-                    return Optional.of(userMapper.userToUserDto(user));
-                }
-        ).orElse(Optional.empty());
+        return userRepository.findById(id).map(userMapper::userToUserDto);
     }
 
     @Override
@@ -62,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
         return clientRole.map(role -> {
             user.addRole(role);
-            user.setEnabled(true); //TODO: Temporal enabling on enroll, will be replaced with email confirmation
+            user.setEmailVerified(false);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userMapper.userToUserDto(userRepository.save(user));
         }).orElseThrow(() -> new IllegalStateException("Client role not found"));
@@ -89,6 +87,20 @@ public class UserServiceImpl implements UserService {
         return existingUser.map(user -> {
             userRepository.deleteById(userId);
             return existingUser;
+        }).orElse(Optional.empty());
+    }
+
+    @Override
+    public Optional<UserDto> verifyUser(String username) {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        return optionalUser.map(user -> {
+
+            user.setEmailVerified(true);
+            user.setEnabled(true);
+            user.setVerificationDate(LocalDateTime.now());
+
+            return Optional.of(userMapper.userToUserDto(userRepository.save(user)));
         }).orElse(Optional.empty());
     }
 }

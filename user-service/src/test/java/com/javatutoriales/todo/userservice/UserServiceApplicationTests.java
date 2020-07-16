@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
+//@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 class UserServiceApplicationTests {
 
     @Test

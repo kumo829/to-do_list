@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.net.URI;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -89,5 +90,10 @@ public class UserController {
         return userService.delete(id).map(u -> ResponseEntity
                 .ok()
                 .body(userAssembler.toModel(u))).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/verify/{username}")
+    public Optional<UserDto> verifyEmail(@PathVariable String username) {
+        return userService.verifyUser(username);
     }
 }

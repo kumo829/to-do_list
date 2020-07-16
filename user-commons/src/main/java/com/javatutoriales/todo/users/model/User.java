@@ -52,6 +52,8 @@ public class User {
 
     private boolean emailVerified;
 
+    private LocalDateTime verificationDate;
+
     @NotBlank
     @Size(max = 60)
     private String password;

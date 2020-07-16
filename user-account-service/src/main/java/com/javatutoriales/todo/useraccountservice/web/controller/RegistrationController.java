@@ -24,7 +24,6 @@ public class RegistrationController {
 
     private static final String API_URL = "/v1/register";
 
-
     private final UserService userService;
     private final UserResourceAssembler userAssembler;
 

@@ -3,6 +3,8 @@ version: '3.7'
 networks:
   users-network:
     driver: bridge
+  verification_tokens-network:
+    driver: bridge
 
 services:
   users_db:
@@ -19,3 +21,18 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=example
     networks:
       - users-network
+
+  verification_tokens_db:
+    image: mongo
+    container_name: verification_tokens_db
+    hostname: verification_tokens_db
+    ports:
+      - 27117:27017
+      - 27118:27018
+      - 27119:27019
+    environment:
+      - MONGO_INITDB_DATABASE=verification_tokens_db
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+    networks:
+      - verification_tokens-network
