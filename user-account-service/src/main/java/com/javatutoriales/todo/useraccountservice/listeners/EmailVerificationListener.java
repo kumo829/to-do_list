@@ -2,6 +2,7 @@ package com.javatutoriales.todo.useraccountservice.listeners;
 
 import com.javatutoriales.todo.useraccountservice.events.UserRegistrationEvent;
 import com.javatutoriales.todo.useraccountservice.services.VerificationService;
+import com.javatutoriales.todo.users.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,9 +29,10 @@ public class EmailVerificationListener implements ApplicationListener<UserRegist
 
     @Override
     public void onApplicationEvent(UserRegistrationEvent event) {
-        String username = event.getUser().getUsername();
-        String email = event.getUser().getEmail();
-        String name = event.getUser().getName();
+        UserDto user = event.getUser();
+        String username = user.getUsername();
+        String email = user.getEmail();
+        String name = user.getName();
 
         String verificationId = verificationService.generateVerificationId(username);
 
@@ -56,7 +58,7 @@ public class EmailVerificationListener implements ApplicationListener<UserRegist
                 "<p><a href=\"%s?id=%s\">Verify my account</a></p>" +
                 "<p>The link will be valid for two days.</p>", name, host, verificationId);
 
-        helper.setText(text);
+        helper.setText(text, true);
 
         return message;
     }
