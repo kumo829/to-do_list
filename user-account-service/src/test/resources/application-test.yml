@@ -1,6 +1,11 @@
 server:
   port: ${PORT:0}
 
+application:
+  host: http://localhost/
+  validationTokenValidDays: 2
+  loginUrl: http://localhost/verified
+
 spring:
   cloud:
     discovery:
