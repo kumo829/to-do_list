@@ -1,0 +1,20 @@
+package com.javatutoriales.todolist.listsservice.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class TODOListDto {
+    private Long id;
+
+    private String name;
+
+    private boolean complete;
+
+    private int version;
+}
