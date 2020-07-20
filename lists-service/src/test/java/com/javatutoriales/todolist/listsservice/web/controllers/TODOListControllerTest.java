@@ -6,6 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,13 +16,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import java.util.stream.Stream;
 
 import static com.javatutoriales.todolist.testutils.TestUtils.asJsonString;
 import static com.javatutoriales.todolist.testutils.TestUtils.jackson2HttpMessageConverter;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,14 +44,14 @@ public class TODOListControllerTest {
     @InjectMocks
     private TODOListController listController;
 
-    TODOListDto postListDto1 = TODOListDto.builder().name("New TO-Do List").build();
-    TODOListDto mockListDto1 = TODOListDto.builder().id(1L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto postListDto1 = TODOListDto.builder().name("New TO-Do List").build();
+    static TODOListDto mockListDto1 = TODOListDto.builder().id(1L).version(1).name(postListDto1.getName()).build();
 
-    TODOListDto postListDto2 = TODOListDto.builder().name("Another TO-Do List").build();
-    TODOListDto mockListDto2 = TODOListDto.builder().id(2L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto postListDto2 = TODOListDto.builder().name("Another TO-Do List").build();
+    static TODOListDto mockListDto2 = TODOListDto.builder().id(2L).version(1).name(postListDto1.getName()).build();
 
-    TODOListDto postListDto3 = TODOListDto.builder().name("One Last TO-Do List").build();
-    TODOListDto mockListDto3 = TODOListDto.builder().id(3L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto postListDto3 = TODOListDto.builder().name("One Last TO-Do List").build();
+    static TODOListDto mockListDto3 = TODOListDto.builder().id(3L).version(1).name(postListDto1.getName()).build();
 
     @BeforeEach
     void setUp() {
@@ -54,30 +60,54 @@ public class TODOListControllerTest {
                 .build();
     }
 
-    @Test
+    @ParameterizedTest(name = "{displayName} - [{index}] {argumentsWithNames}")
+    @MethodSource("getListsDto")
     @DisplayName("POST /todolist - SUCCESS")
-    public void whenNewToDoList_thenNewRecordIsCreated() throws Exception {
+    public void whenNewToDoList_thenNewRecordIsCreated(TODOListDto postListDto, TODOListDto mockList, long expectedId) throws Exception {
 
-        given(listService.save(postListDto1)).willReturn(mockListDto1);
-        given(listService.save(postListDto2)).willReturn(mockListDto2);
-        given(listService.save(postListDto3)).willReturn(mockListDto3);
+        given(listService.save(postListDto)).willReturn(mockList);
 
-        performNewListDtoRequestAndValidations(mockMvc, 1, postListDto1);
-        performNewListDtoRequestAndValidations(mockMvc, 2, postListDto2);
-        performNewListDtoRequestAndValidations(mockMvc, 3, postListDto3);
-    }
-
-    private void performNewListDtoRequestAndValidations(@NotNull @NotNull MockMvc mockMvc, @Positive long expectedId, @NotNull TODOListDto postListDto) throws Exception {
         mockMvc.perform(post(API_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(postListDto)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
-                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/"  + expectedId ))
+                .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + expectedId))
 
                 .andExpect(jsonPath("$.name", is(postListDto.getName())))
-                .andExpect(jsonPath("$.complete", is(false)))
+                //  .andExpect(jsonPath("$.complete", is(null)))
 
                 .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("POST /todolist - Validation ERROR")
+    void whenInvalidFieldsOnTODOList_thenValidationError() throws Exception {
+        TODOListDto postListDto = TODOListDto.builder().name("New TO-Do List").complete(true).id(1L).version(1).build();
+
+        mockMvc.perform(post(API_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(postListDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException))
+
+                .andExpect(result -> assertAll(
+                        () -> assertThat(result.getResolvedException().getMessage(), containsString("with 3 errors")),
+                        () -> assertThat(result.getResolvedException().getMessage(), containsString("complete")),
+                        () -> assertThat(result.getResolvedException().getMessage(), containsString("version")),
+                        () -> assertThat(result.getResolvedException().getMessage(), containsString("id")),
+
+                        () -> assertThat(result.getResolvedException().getMessage(), not(containsString("name")))
+                ))
+
+                .andDo(print());
+    }
+
+
+    static Stream<Arguments> getListsDto() {
+        return Stream.of(
+                Arguments.of(postListDto1, mockListDto1, 1),
+                Arguments.of(postListDto2, mockListDto2, 2),
+                Arguments.of(postListDto3, mockListDto3, 3)
+        );
     }
 }
