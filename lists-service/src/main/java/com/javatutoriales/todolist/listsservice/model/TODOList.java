@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Null;
 import java.time.Instant;
 
 @Entity
@@ -18,6 +18,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class TODOList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,18 +29,15 @@ public class TODOList {
 
     private boolean complete;
 
-    @Null
     @Version
     private Integer version;
 
 
     @CreatedDate
-    @Null
     @Column(name = "creation_date", updatable = false)
     private Instant creationDate;
 
     @LastModifiedDate
-    @Null
     @Column(name = "last_modification_date")
     private Instant lastModificationDate;
 }
