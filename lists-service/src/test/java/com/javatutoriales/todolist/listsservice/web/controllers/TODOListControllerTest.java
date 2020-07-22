@@ -45,13 +45,13 @@ public class TODOListControllerTest {
     private TODOListController listController;
 
     static TODOListDto postListDto1 = TODOListDto.builder().name("New TO-Do List").build();
-    static TODOListDto mockListDto1 = TODOListDto.builder().id(1L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto mockListDto1 = TODOListDto.builder().id(1L).version(0).name(postListDto1.getName()).build();
 
     static TODOListDto postListDto2 = TODOListDto.builder().name("Another TO-Do List").build();
-    static TODOListDto mockListDto2 = TODOListDto.builder().id(2L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto mockListDto2 = TODOListDto.builder().id(2L).version(0).name(postListDto1.getName()).build();
 
     static TODOListDto postListDto3 = TODOListDto.builder().name("One Last TO-Do List").build();
-    static TODOListDto mockListDto3 = TODOListDto.builder().id(3L).version(1).name(postListDto1.getName()).build();
+    static TODOListDto mockListDto3 = TODOListDto.builder().id(3L).version(0).name(postListDto1.getName()).build();
 
     @BeforeEach
     void setUp() {
@@ -71,7 +71,7 @@ public class TODOListControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
-                .andExpect(header().string(HttpHeaders.ETAG, "\"1\""))
+                .andExpect(header().string(HttpHeaders.ETAG, "\"0\""))
                 .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + expectedId))
 
                 .andExpect(jsonPath("$.name", is(postListDto.getName())))
