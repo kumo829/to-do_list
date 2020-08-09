@@ -45,7 +45,7 @@ class TODOListServiceTest {
 
         given(listRepository.save(any(TODOList.class))).willReturn(responseList);
 
-        TODOListDto savedList = listService.save(listDto);
+        TODOListDto savedList = listService.save(listDto, "username");
 
         assertThat(savedList).isNotNull();
         assertThat(savedList.getName()).isNotEmpty();

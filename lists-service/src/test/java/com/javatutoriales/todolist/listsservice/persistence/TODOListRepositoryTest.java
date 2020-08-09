@@ -38,6 +38,7 @@ class TODOListRepositoryTest {
         Instant now = Instant.now();
 
         TODOList todoList = TODOList.builder().name("New TO-DO List").build();
+        todoList.setUsername("username");
 
         TODOList savedList = listRepository.save(todoList);
 
@@ -46,6 +47,8 @@ class TODOListRepositoryTest {
         assertThat(savedList.getCreationDate()).isNotNull().isAfterOrEqualTo(now);
         assertThat(savedList.getLastModificationDate()).isNotNull().isAfterOrEqualTo(now);
         assertThat(savedList.getVersion()).isNotNull().isEqualTo(0);
+        assertThat(savedList.getVersion()).isNotNull().isEqualTo(0);
+        assertThat(savedList.getUsername()).isNotNull().isEqualTo(todoList.getUsername());
         assertThat(savedList.getName()).isNotEmpty().isEqualTo(todoList.getName());
     }
 

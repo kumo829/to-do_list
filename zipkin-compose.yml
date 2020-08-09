@@ -8,10 +8,16 @@
 
 version: '3.7'
 
+networks:
+  zipkin-network:
+    driver: bridge
+
 services:
   storage:
     image: openzipkin/zipkin-mysql
     container_name: mysql
+    networks:
+      - zipkin-network
     # Uncomment to expose the storage port for testing
     # ports:
     #   - 3306:3306
@@ -39,6 +45,8 @@ services:
       # - 9410:9410
     depends_on:
       - storage
+    networks:
+      - zipkin-network
 
   # Adds a cron to process spans since midnight every hour, and all spans each day
   # This data is served by http://192.168.99.100:8080/dependency
@@ -70,17 +78,21 @@ services:
       - storage
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - zipkin-network
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     ports:
-      - 3000:3000
+      - 3001:3000
     depends_on:
       - prometheus
     environment:
       - GF_AUTH_ANONYMOUS_ENABLED=true
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    networks:
+      - zipkin-network
 
   setup_grafana_datasource:
     image: appropriate/curl
@@ -90,3 +102,5 @@ services:
     volumes:
       - ./prometheus/create-datasource-and-dashboard.sh:/create.sh
     command: /create.sh/create.sh
+    networks:
+      - zipkin-network

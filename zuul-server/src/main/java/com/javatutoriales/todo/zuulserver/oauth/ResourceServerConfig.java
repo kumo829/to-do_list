@@ -21,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @RefreshScope
@@ -51,9 +50,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/account/v1/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/account/v1/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/account/verify/**").permitAll()
-                .antMatchers("/api/**/").hasAnyRole("Administrator")
+                .antMatchers(HttpMethod.POST, "/api/todolists/v1/todolist").hasRole("User")
+                .antMatchers("/v1/todolist/**").hasAnyRole("Administrator", "User")
+                .antMatchers("/api/todolists/**").hasAnyRole("Administrator", "User")
+                .antMatchers("/api/**").hasAnyRole("Administrator")
                 .anyRequest().authenticated()
-            .and().cors().configurationSource(corsConfigurationSource());
+                .and().cors().configurationSource(corsConfigurationSource());
+//            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //        @formatter:on
     }
 

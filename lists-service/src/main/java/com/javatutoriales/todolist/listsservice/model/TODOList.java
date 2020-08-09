@@ -27,6 +27,9 @@ public class TODOList {
     @NotEmpty
     private String name;
 
+    @Column(updatable = false, nullable = false, length = 10)
+    private String username;
+    
     private boolean complete;
 
     @Version
@@ -40,4 +43,5 @@ public class TODOList {
     @LastModifiedDate
     @Column(name = "last_modification_date")
     private Instant lastModificationDate;
+
 }

@@ -5,6 +5,8 @@ networks:
     driver: bridge
   verification_tokens-network:
     driver: bridge
+  lists-network:
+    driver: bridge
 
 services:
   users_db:
@@ -36,3 +38,18 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=example
     networks:
       - verification_tokens-network
+
+
+  lists_db:
+    image: mysql:8
+    container_name: lists_db
+    hostname: lists_db
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=lists_fb
+      - MYSQL_ROOT_PASSWORD=${MYSQL_LIST_ROOT_PASS}
+      - MYSQL_USER=${MYSQL_LIST_USER}
+      - MYSQL_PASSWORD=${MYSQL_LIST_PASS}
+    networks:
+      - lists-network

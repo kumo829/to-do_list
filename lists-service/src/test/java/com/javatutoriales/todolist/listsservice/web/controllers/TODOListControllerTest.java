@@ -14,10 +14,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.javatutoriales.todolist.testutils.TestUtils.asJsonString;
@@ -65,9 +72,12 @@ public class TODOListControllerTest {
     @DisplayName("POST /todolist - SUCCESS")
     public void whenNewToDoList_thenNewRecordIsCreated(TODOListDto postListDto, TODOListDto mockList, long expectedId) throws Exception {
 
-        given(listService.save(postListDto)).willReturn(mockList);
+        given(listService.save(postListDto, "username")).willReturn(mockList);
 
-        mockMvc.perform(post(API_URL).contentType(MediaType.APPLICATION_JSON).content(asJsonString(postListDto)))
+        mockMvc.perform(
+                post(API_URL)
+                        .principal(getJWT("username"))
+                        .contentType(MediaType.APPLICATION_JSON).content(asJsonString(postListDto)))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
@@ -109,5 +119,20 @@ public class TODOListControllerTest {
                 Arguments.of(postListDto2, mockListDto2, 2),
                 Arguments.of(postListDto3, mockListDto3, 3)
         );
+    }
+
+    private Principal getJWT(String username) {
+        OAuth2Request oAuth2Request = new OAuth2Request(null,
+                username,
+                List.of(new SimpleGrantedAuthority("ROLE_User")),
+                true,
+                Set.of("read", "write"),
+                null,
+                null,
+                null,
+                Map.of("emal", "user@mail.com", "name", "User")
+        );
+
+        return new OAuth2Authentication(oAuth2Request, null);;
     }
 }

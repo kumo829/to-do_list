@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @Service
 @RequiredArgsConstructor
 public class TODOListServiceImpl implements TODOListService {
@@ -16,11 +19,14 @@ public class TODOListServiceImpl implements TODOListService {
     private final TODOListMapper listMapper;
 
     @Override
-    public TODOListDto save(@Validated TODOListDto listDto) {
+    public TODOListDto save(@Validated TODOListDto listDto, @NotNull @NotEmpty String username) {
 
         listDto.setComplete(false);
 
-        TODOList savedList = listRepository.save(listMapper.todoListDtoToTODOList(listDto));
+        TODOList receivedList = listMapper.todoListDtoToTODOList(listDto);
+        receivedList.setUsername(username);
+
+        TODOList savedList = listRepository.save(receivedList);
 
         return listMapper.todoListToTODOListDto(savedList);
     }

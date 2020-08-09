@@ -10,6 +10,10 @@ networks:
     driver: bridge
   verification_tokens-network:
     driver: bridge
+  zipkin-network:
+    driver: bridge
+  lists-network:
+    driver: bridge
 
 services:
 
@@ -23,6 +27,7 @@ services:
     restart: always
     networks:
       - TO-DO-cloud-network
+      - zipkin-network
 
 
   eureka-server:
@@ -33,6 +38,7 @@ services:
     restart: always
     networks:
       - TO-DO-cloud-network
+      - zipkin-network
 
 
   zuul-server:
@@ -45,6 +51,7 @@ services:
     restart: always
     networks:
       - TO-DO-cloud-network
+      - zipkin-network
     depends_on:
       - config-server
       - eureka-server
@@ -53,17 +60,19 @@ services:
   users-service:
     image: todo-user-service:v1.0.1
     environment:
-#      - EUREKA_SERVER=http://eureka-server:8761/eureka #Not necessary here, this value is taking from config server
       - CONFIG_SERVER=http://config-server:8888
       - MONGO_DATABASE=users_db
       - MONGODB_USERS_HOST=users_db
       - MONGODB_USERS_PORT=27017
       - MONGODB_USERNAME=testUser
       - MONGODB_PASSWORD=pwd
+#      - spring_profiles_active=init_roles
+#      - spring_profiles_active=init_users
     restart: always
     networks:
       - TO-DO-cloud-network
       - users-network
+      - zipkin-network
     links:
       - users_db
     depends_on:
@@ -88,6 +97,7 @@ services:
     networks:
       - TO-DO-cloud-network
       - verification_tokens-network
+      - zipkin-network
     depends_on:
       - config-server
       - eureka-server
@@ -100,11 +110,31 @@ services:
     environment:
       - CONFIG_SERVER=http://config-server:8888
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK=DEBUG
-#      - EUREKA_SERVER=http://eureka-server:8761/eureka #Not necessary here, this value is taking from config server
     restart: always
     networks:
       - TO-DO-cloud-network
+      - zipkin-network
     depends_on:
       - config-server
       - eureka-server
       - users-service
+
+#  lists-service:
+#    image: todo-list-service:v1.0.0
+#    environment:
+#      - CONFIG_SERVER=http://config-server:8888
+#      - DB_HOST=lists_db
+#      - DB_NAME=lists_fb
+#      - DB_PORT=3306
+#      - DB_USER=${MYSQL_LIST_USER}
+#      - DB_PASSWORD=${MYSQL_LIST_PASS}
+#    restart: always
+#    networks:
+#      - TO-DO-cloud-network
+#      - lists-network
+#      - zipkin-network
+#    depends_on:
+#      - lists_db
+#      - config-server
+#      - eureka-server
+#      - oauth-service
