@@ -1,41 +1,34 @@
 package com.javatutoriales.todolist.listsservice.persistence;
 
-import com.github.database.rider.junit5.DBUnitExtension;
+import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.junit5.api.DBRider;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.datasource.ConnectionHandle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith({DBUnitExtension.class, SpringExtension.class})
 @SpringBootTest
 @ActiveProfiles("test")
+@DBRider
 class TODOListRepositoryTest {
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     private TODOListRepository listRepository;
-
-    public ConnectionHandle getConnectionHolder() throws SQLException {
-        return (ConnectionHandle)dataSource.getConnection();
-    }
 
     @Test
     @DisplayName("Save TODO-List - SUCCESS")
     void whenSaveTODOList_thenNewTodoListInDatabase(){
 
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now();
 
         TODOList todoList = TODOList.builder().name("New TO-DO List").build();
         todoList.setUsername("username");
@@ -52,4 +45,21 @@ class TODOListRepositoryTest {
         assertThat(savedList.getName()).isNotEmpty().isEqualTo(todoList.getName());
     }
 
+    @Test
+    @DisplayName("Get TODO-List paged 10 - SUCCESS")
+    @DataSet("todo_lists.json")
+    void whenPagedDataSetOfTen_thenGetTenSizeElementsList(){
+        assertThat(listRepository.count()).isEqualTo(1000);
+
+        Page<TODOList> firsPageResult = listRepository.findAll(PageRequest.of(0, 10));
+
+        assertThat(firsPageResult).isNotNull();
+        assertThat(firsPageResult.getTotalElements()).isEqualTo(1000);
+        assertThat(firsPageResult.getTotalPages()).isEqualTo(100);
+        assertThat(firsPageResult.getSize()).isEqualTo(10);
+
+        List<TODOList> lists = firsPageResult.getContent();
+
+        assertThat(lists).hasSize(10);
+    }
 }

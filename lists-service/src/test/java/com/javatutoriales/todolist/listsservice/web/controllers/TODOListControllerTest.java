@@ -1,7 +1,9 @@
 package com.javatutoriales.todolist.listsservice.web.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.services.TODOListService;
+import com.javatutoriales.todolist.testutils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +37,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,6 +48,8 @@ public class TODOListControllerTest {
     private static final String API_URL = "/v1/todolist";
 
     private MockMvc mockMvc;
+
+    ObjectMapper mapper = TestUtils.getObjectMapper();
 
     @Mock
     TODOListService listService;
@@ -79,13 +85,9 @@ public class TODOListControllerTest {
                         .principal(getJWT("username"))
                         .contentType(MediaType.APPLICATION_JSON).content(asJsonString(postListDto)))
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
 
                 .andExpect(header().string(HttpHeaders.ETAG, "\"0\""))
                 .andExpect(header().string(HttpHeaders.LOCATION, API_URL + "/" + expectedId))
-
-                .andExpect(jsonPath("$.name", is(postListDto.getName())))
-                //  .andExpect(jsonPath("$.complete", is(null)))
 
                 .andDo(print());
     }
@@ -112,6 +114,21 @@ public class TODOListControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("GET /todolists - Get Results with default pagination - SUCCESS")
+    void whenGetResultsWithDefaultPaginationAndSorting_thenWillGetFirst10Results() throws Exception {
+
+        TODOListDto[] lists = mapper.readValue(ClassLoader.getSystemResourceAsStream("datasets/first10Results.json"), TODOListDto[].class);
+
+        given(listService.getLists("username", 0, 10)).willReturn(Arrays.asList(lists));
+
+        mockMvc.perform(get(API_URL).principal(getJWT("username")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(10)))
+
+                .andDo(print());
+    }
+
 
     static Stream<Arguments> getListsDto() {
         return Stream.of(
@@ -133,6 +150,6 @@ public class TODOListControllerTest {
                 Map.of("emal", "user@mail.com", "name", "User")
         );
 
-        return new OAuth2Authentication(oAuth2Request, null);;
+        return new OAuth2Authentication(oAuth2Request, null);
     }
 }

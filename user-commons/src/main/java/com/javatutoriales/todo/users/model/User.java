@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,7 +39,7 @@ public class User {
 
     @NotBlank
     @Size(max = 50)
-    @Indexed(unique = true, name = "user_username_index_unique")
+    @Indexed(unique = true, name = "user_username_index_unique", direction = IndexDirection.ASCENDING)
     @Setter(AccessLevel.PRIVATE)
     private String username;
 

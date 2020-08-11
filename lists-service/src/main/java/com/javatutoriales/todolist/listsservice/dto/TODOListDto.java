@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Null;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +28,5 @@ public class TODOListDto {
     private Integer version;
 
     @Null
-    private Instant creationDate;
+    private OffsetDateTime creationDate;
 }

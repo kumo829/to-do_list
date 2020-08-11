@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "todo_lists")
@@ -27,9 +27,9 @@ public class TODOList {
     @NotEmpty
     private String name;
 
-    @Column(updatable = false, nullable = false, length = 10)
+    @Column(updatable = false, nullable = false, length = 30)
     private String username;
-    
+
     private boolean complete;
 
     @Version
@@ -38,10 +38,10 @@ public class TODOList {
 
     @CreatedDate
     @Column(name = "creation_date", updatable = false)
-    private Instant creationDate;
+    private LocalDateTime creationDate;
 
     @LastModifiedDate
     @Column(name = "last_modification_date")
-    private Instant lastModificationDate;
+    private LocalDateTime lastModificationDate;
 
 }

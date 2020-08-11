@@ -57,11 +57,11 @@ public class TODOListControllerIT {
 
         assertThat(listResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
         assertThat(listResponse.getHeaders().getETag()).isEqualTo("\"0\"");
-        assertThat(listResponse.getBody()).isNotNull();
+        assertThat(listResponse.getBody()).isNull();
 
         TODOListDto responseList = listResponse.getBody();
 
-        assertThat(responseList).isNotNull();
+        assertThat(responseList).isNull();
     }
 
     private String getJWT(String username){
