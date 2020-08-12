@@ -4,6 +4,7 @@ import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.services.TODOListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class TODOListController {
     private final TODOListService listService;
 
     @PostMapping
-    public ResponseEntity createNewList(@RequestBody @Valid TODOListDto listDto, Principal principal) {
+    public ResponseEntity<Void> createNewList(@RequestBody @Valid TODOListDto listDto, Principal principal) {
 
         log.debug("Principal: {}", principal);
         log.debug("Name: {}", principal.getName());
@@ -36,7 +37,12 @@ public class TODOListController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TODOListDto>> getTODOLists(@RequestParam(required = false, defaultValue = "0") short page, @RequestParam(required = false, defaultValue = "10") short resultsPerPage, Principal principal) {
+    public ResponseEntity<List<TODOListDto>> getTODOLists(@RequestParam(required = false, defaultValue = "0") short page, @RequestParam(name = "results", required = false, defaultValue = "10") short resultsPerPage, Principal principal) {
+
+        if(principal == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         log.debug("Principal: {}", principal);
         log.debug("Name: {}", principal.getName());
 
