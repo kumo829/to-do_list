@@ -2,6 +2,7 @@ package com.javatutoriales.todolist.listsservice.services;
 
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListMapper;
+import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import com.javatutoriales.todolist.listsservice.persistence.TODOListRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,10 +36,10 @@ public class TODOListServiceImpl implements TODOListService {
     }
 
     @Override
-    public List<TODOListDto> getLists(String name, int page, int resultsPerPage) {
+    public PagedTodoLists getLists(String name, int page, int resultsPerPage) {
 
         Page<TODOList> todoListsPage = listRepository.findAll(PageRequest.of(page, resultsPerPage));
 
-        return todoListsPage.get().map(list -> listMapper.todoListToTODOListDto(list)).collect(Collectors.toList());
+        return new PagedTodoLists(todoListsPage.get().map(listMapper::todoListToTODOListDto).collect(Collectors.toList()), todoListsPage.getTotalPages(), todoListsPage.getTotalElements());
     }
 }

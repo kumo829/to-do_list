@@ -119,22 +119,22 @@ services:
       - eureka-server
       - users-service
 
-#  lists-service:
-#    image: todo-list-service:v1.0.0
-#    environment:
-#      - CONFIG_SERVER=http://config-server:8888
-#      - DB_HOST=lists_db
-#      - DB_NAME=lists_fb
-#      - DB_PORT=3306
-#      - DB_USER=${MYSQL_LIST_USER}
-#      - DB_PASSWORD=${MYSQL_LIST_PASS}
-#    restart: always
-#    networks:
-#      - TO-DO-cloud-network
-#      - lists-network
-#      - zipkin-network
-#    depends_on:
-#      - lists_db
-#      - config-server
-#      - eureka-server
-#      - oauth-service
+  lists-service:
+    image: todo-list-service:v1.0.0
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+      - DB_HOST=lists_db
+      - DB_NAME=lists_fb
+      - DB_PORT=3306
+      - DB_USER=${MYSQL_LIST_USER}
+      - DB_PASSWORD=${MYSQL_LIST_PASS}
+    restart: always
+    networks:
+      - TO-DO-cloud-network
+      - lists-network
+      - zipkin-network
+    depends_on:
+      - lists_db
+      - config-server
+      - eureka-server
+      - oauth-service

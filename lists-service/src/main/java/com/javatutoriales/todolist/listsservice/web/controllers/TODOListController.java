@@ -1,6 +1,7 @@
 package com.javatutoriales.todolist.listsservice.web.controllers;
 
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
+import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.services.TODOListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/todolist")
@@ -37,7 +37,7 @@ public class TODOListController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TODOListDto>> getTODOLists(@RequestParam(required = false, defaultValue = "0") short page, @RequestParam(name = "results", required = false, defaultValue = "10") short resultsPerPage, Principal principal) {
+    public ResponseEntity<PagedTodoLists> getTODOLists(@RequestParam(required = false, defaultValue = "0") short page, @RequestParam(name = "results", required = false, defaultValue = "10") short resultsPerPage, Principal principal) {
 
         if(principal == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -46,8 +46,7 @@ public class TODOListController {
         log.debug("Principal: {}", principal);
         log.debug("Name: {}", principal.getName());
 
-        List<TODOListDto> result = listService.getLists(principal.getName(), page, resultsPerPage);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(listService.getLists(principal.getName(), page, resultsPerPage));
     }
 }

@@ -3,6 +3,7 @@ package com.javatutoriales.todolist.listsservice.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListMapper;
+import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import com.javatutoriales.todolist.listsservice.persistence.TODOListRepository;
 import com.javatutoriales.todolist.testutils.TestUtils;
@@ -93,8 +94,11 @@ class TODOListServiceTest {
         given(listRepository.findAll(any(Pageable.class))).willReturn(todoListPage);
 
 
-        List<TODOListDto> result = listService.getLists("username", (short) 0, (short) 10);
+        PagedTodoLists result = listService.getLists("username", 0, 10);
 
-        assertThat(result).isNotNull().isNotEmpty().hasSize(10);
+        assertThat(result).isNotNull();
+        assertThat(result.getTotalPages()).isEqualTo(1);
+        assertThat(result.getTotalElements()).isEqualTo(10);
+        assertThat(result.getContent()).isNotNull().isNotEmpty().hasSize(10);
     }
 }

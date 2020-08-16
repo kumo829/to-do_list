@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -43,6 +44,28 @@ class TODOListRepositoryTest {
         assertThat(savedList.getVersion()).isNotNull().isEqualTo(0);
         assertThat(savedList.getUsername()).isNotNull().isEqualTo(todoList.getUsername());
         assertThat(savedList.getName()).isNotEmpty().isEqualTo(todoList.getName());
+    }
+
+    @Test
+    @DisplayName("Save TODO-List with exiration date - SUCCESS")
+    void whenSaveTODOListWithExpirationDate_thenNewTodoListInDatabase(){
+
+        LocalDateTime now = LocalDateTime.now();
+
+        TODOList todoList = TODOList.builder().name("New TO-DO List").expirationDate(LocalDate.now().plusDays(10)).build();
+        todoList.setUsername("username");
+
+        TODOList savedList = listRepository.save(todoList);
+
+        assertThat(savedList).isNotNull();
+        assertThat(savedList.getId()).isNotNull().isPositive();
+        assertThat(savedList.getCreationDate()).isNotNull().isAfterOrEqualTo(now);
+        assertThat(savedList.getLastModificationDate()).isNotNull().isAfterOrEqualTo(now);
+        assertThat(savedList.getVersion()).isNotNull().isEqualTo(0);
+        assertThat(savedList.getVersion()).isNotNull().isEqualTo(0);
+        assertThat(savedList.getUsername()).isNotNull().isEqualTo(todoList.getUsername());
+        assertThat(savedList.getName()).isNotEmpty().isEqualTo(todoList.getName());
+        assertThat(savedList.getExpirationDate()).isNotNull().isAfterOrEqualTo(LocalDate.now().plusDays(10));
     }
 
     @Test

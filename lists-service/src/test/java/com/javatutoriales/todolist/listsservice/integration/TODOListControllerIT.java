@@ -4,6 +4,7 @@ package com.javatutoriales.todolist.listsservice.integration;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
+import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +70,18 @@ public class TODOListControllerIT {
         headers.set("Authorization", "Bearer " + token);
         HttpEntity<Void> request = new HttpEntity<>(null, headers);
 
-        final ResponseEntity<List<TODOListDto>> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
+        final ResponseEntity<PagedTodoLists> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL, HttpMethod.GET, request, new ParameterizedTypeReference<>() {
         });
 
         assertThat(listResponse).isNotNull();
         assertThat(listResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
-        assertThat(listResponse.getBody()).isNotNull().isNotEmpty();
+        assertThat(listResponse.getBody()).isNotNull();
+        assertThat(listResponse.getBody().getTotalPages()).isEqualTo(100);
+        assertThat(listResponse.getBody().getTotalElements()).isEqualTo(1000);
 
-        List<TODOListDto> responseBody = listResponse.getBody();
+        assertThat(listResponse.getBody().getContent()).isNotNull().isNotEmpty();
+
+        List<TODOListDto> responseBody = listResponse.getBody().getContent();
 
         assertThat(responseBody).hasSize(10);
         assertThat(responseBody).allMatch(Objects::nonNull);
@@ -92,14 +97,17 @@ public class TODOListControllerIT {
         headers.set("Authorization", "Bearer " + token);
         HttpEntity<Void> request = new HttpEntity<>(null, headers);
 
-        final ResponseEntity<List<TODOListDto>> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL + "?page=0&results=5", HttpMethod.GET, request, new ParameterizedTypeReference<>() {
+        final ResponseEntity<PagedTodoLists> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL + "?page=0&results=5", HttpMethod.GET, request, new ParameterizedTypeReference<>() {
         });
 
         assertThat(listResponse).isNotNull();
         assertThat(listResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.OK);
-        assertThat(listResponse.getBody()).isNotNull().isNotEmpty();
+        assertThat(listResponse.getBody()).isNotNull();
+        assertThat(listResponse.getBody().getTotalElements()).isNotNull().isEqualTo(1000);
+        assertThat(listResponse.getBody().getTotalPages()).isNotNull().isEqualTo(200);
+        assertThat(listResponse.getBody().getContent()).isNotNull().isNotEmpty();
 
-        List<TODOListDto> responseBody = listResponse.getBody();
+        List<TODOListDto> responseBody = listResponse.getBody().getContent();
 
         assertThat(responseBody).hasSize(5);
         assertThat(responseBody).allMatch(Objects::nonNull);
@@ -110,7 +118,7 @@ public class TODOListControllerIT {
     @Test
     void whenGetTODOListsWithouthAutorizationToken_thenGetUnauthorized(){
 
-        final ResponseEntity<List<TODOListDto>> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        final ResponseEntity<PagedTodoLists> listResponse = restTemplate.exchange(DOMAIN + ":" + port + "/" + API_URL, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
         });
 
         assertThat(listResponse).isNotNull();

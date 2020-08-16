@@ -2,6 +2,7 @@ package com.javatutoriales.todolist.listsservice.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
+import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.services.TODOListService;
 import com.javatutoriales.todolist.testutils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,12 +120,15 @@ public class TODOListControllerTest {
     void whenGetResultsWithDefaultPaginationAndSorting_thenWillGetFirst10Results() throws Exception {
 
         TODOListDto[] lists = mapper.readValue(ClassLoader.getSystemResourceAsStream("datasets/first10Results.json"), TODOListDto[].class);
+        PagedTodoLists resultList = new PagedTodoLists(Arrays.asList(lists), 1, lists.length);
 
-        given(listService.getLists("username", 0, 10)).willReturn(Arrays.asList(lists));
+        given(listService.getLists("username", 0, 10)).willReturn(resultList);
 
         mockMvc.perform(get(API_URL).principal(getJWT("username")).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(10)))
+                .andExpect(jsonPath("$.content", hasSize(10)))
+                .andExpect(jsonPath("$.totalPages", is(1)))
+                .andExpect(jsonPath("$.totalElements", is(10)))
 
                 .andDo(print());
     }

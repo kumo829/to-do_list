@@ -29,4 +29,8 @@ public class TODOListDto {
 
     @Null
     private OffsetDateTime creationDate;
+
+    private OffsetDateTime expirationDate;
+
+    private float completion;
 }

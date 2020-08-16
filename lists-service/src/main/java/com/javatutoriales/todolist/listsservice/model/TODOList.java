@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -44,4 +45,5 @@ public class TODOList {
     @Column(name = "last_modification_date")
     private LocalDateTime lastModificationDate;
 
+    private LocalDate expirationDate;
 }
