@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Null;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TODOListDto {
-
+public class TaskDto {
     @Null
     private Long id;
 
@@ -25,15 +23,14 @@ public class TODOListDto {
     @Null
     private Boolean complete;
 
-    @Null
-    private Integer version;
+    private LocalDate expiration;
 
-    @Null
-    private OffsetDateTime creationDate;
+    public TaskDto(@NotEmpty String name) {
+        this.name = name;
+    }
 
-    private OffsetDateTime expirationDate;
-
-    private float completion;
-
-    private List<TaskDto> tasks;
+    public TaskDto(@NotEmpty String name, LocalDate expiration) {
+        this.name = name;
+        this.expiration = expiration;
+    }
 }

@@ -25,8 +25,6 @@ public class TODOListServiceImpl implements TODOListService {
     @Override
     public TODOListDto save(@Validated @NotNull TODOListDto listDto, @NotNull @NotEmpty String username) {
 
-        listDto.setComplete(false);
-
         TODOList receivedList = listMapper.todoListDtoToTODOList(listDto);
         receivedList.setUsername(username);
 

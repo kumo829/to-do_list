@@ -28,6 +28,8 @@ public class TODOListController {
 
         log.debug("Principal: {}", principal);
         log.debug("Name: {}", principal.getName());
+//        log.debug("Tasks: {}", listDto.getTasks().size());
+        log.debug("Tasks: {}", listDto.getTasks());
 
         TODOListDto resultListDto = listService.save(listDto, principal.getName());
 

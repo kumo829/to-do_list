@@ -4,6 +4,7 @@ package com.javatutoriales.todolist.listsservice.integration;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
+import com.javatutoriales.todolist.listsservice.dto.TaskDto;
 import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,8 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,10 +45,47 @@ public class TODOListControllerIT {
     @LocalServerPort
     private Integer port;
 
-    @DisplayName("POST Save TODOList - SUCCESS")
     @Test
+    @DisplayName("POST Save TODOList - SUCCESS")
     void whenSaveNewTODOList_thenIdAndCreationDateShouldNotBeNull() {
         TODOListDto todoListDto = TODOListDto.builder().name("New TODOList Dto").build();
+
+        String token = getJWT("username");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<TODOListDto> request = new HttpEntity<>(todoListDto, headers);
+
+        final ResponseEntity<TODOListDto> listResponse = restTemplate.postForEntity(DOMAIN + ":" + port + "/" + API_URL, request, TODOListDto.class);
+
+        assertThat(listResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
+        assertThat(listResponse.getHeaders().getETag()).isEqualTo("\"0\"");
+        assertThat(listResponse.getBody()).isNull();
+    }
+
+    @Test
+    @DisplayName("POST Save TODOList with expiration date - SUCCESS")
+    void whenSaveNewTODOListWithExpirationDate_thenIdAndCreationDateShouldNotBeNull() {
+        TODOListDto todoListDto = TODOListDto.builder().name("New TODOList Dto").expirationDate(OffsetDateTime.now().plusDays(10)).build();
+
+        String token = getJWT("username");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        HttpEntity<TODOListDto> request = new HttpEntity<>(todoListDto, headers);
+
+        final ResponseEntity<TODOListDto> listResponse = restTemplate.postForEntity(DOMAIN + ":" + port + "/" + API_URL, request, TODOListDto.class);
+
+        assertThat(listResponse.getStatusCode()).isEqualByComparingTo(HttpStatus.CREATED);
+        assertThat(listResponse.getHeaders().getETag()).isEqualTo("\"0\"");
+        assertThat(listResponse.getBody()).isNull();
+    }
+
+    @DisplayName("Post Save TODOList with Tasks - SUCCESS")
+    @Test
+    void whenSaveNewTodoListWithTasks_thenIdAndDatesShouldNotBeNull(){
+        TODOListDto todoListDto = TODOListDto.builder().name("New TODOList Dto").build();
+        List<TaskDto> tasks = List.of(new TaskDto("Task 1"), new TaskDto("Task 2", LocalDate.now()));
 
         String token = getJWT("username");
 

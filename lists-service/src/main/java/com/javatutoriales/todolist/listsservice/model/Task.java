@@ -10,19 +10,17 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "todo_lists")
+@Table(name = "tasks")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-public class TODOList {
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,15 +28,7 @@ public class TODOList {
     @NotEmpty
     private String name;
 
-    @Column(updatable = false, nullable = false, length = 30)
-    @NotNull(message = "username must be provided")
-    private String username;
-
-    private boolean complete;
-
-    @Version
-    private Integer version;
-
+    private LocalDate expirationDate;
 
     @CreatedDate
     @Column(name = "creation_date", updatable = false)
@@ -48,8 +38,15 @@ public class TODOList {
     @Column(name = "last_modification_date")
     private LocalDateTime lastModificationDate;
 
-    private LocalDate expirationDate;
+    @Version
+    int version;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+    public Task(String name) {
+        this.name = name;
+    }
+
+    public Task(String name, LocalDate expirationDate) {
+        this(name);
+        this.expirationDate = expirationDate;
+    }
 }
