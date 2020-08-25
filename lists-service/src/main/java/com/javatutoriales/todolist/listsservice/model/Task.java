@@ -41,6 +41,11 @@ public class Task {
     @Version
     int version;
 
+    private boolean complete;
+
+    @Column(name = "completed_time")
+    private LocalDateTime completedTime;
+
     public Task(String name) {
         this.name = name;
     }

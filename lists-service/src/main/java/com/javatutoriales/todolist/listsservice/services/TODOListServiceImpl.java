@@ -2,10 +2,12 @@ package com.javatutoriales.todolist.listsservice.services;
 
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListMapper;
+import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListSummaryDto;
 import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import com.javatutoriales.todolist.listsservice.persistence.TODOListRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,10 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TODOListServiceImpl implements TODOListService {
 
     private final TODOListRepository listRepository;
@@ -36,8 +38,12 @@ public class TODOListServiceImpl implements TODOListService {
     @Override
     public PagedTodoLists getLists(String name, int page, int resultsPerPage) {
 
-        Page<TODOList> todoListsPage = listRepository.findAll(PageRequest.of(page, resultsPerPage));
+        Page<TODOListSummaryDto> todoListSummaryPage = listRepository.findAllSummary(PageRequest.of(page, resultsPerPage));
 
-        return new PagedTodoLists(todoListsPage.get().map(listMapper::todoListToTODOListDto).collect(Collectors.toList()), todoListsPage.getTotalPages(), todoListsPage.getTotalElements());
+        log.debug("todoListSummaryPage: {}", todoListSummaryPage);
+        log.debug("todoListSummaryPage.getTotalPages(): {}", todoListSummaryPage.getTotalPages());
+
+
+        return new PagedTodoLists(todoListSummaryPage.getContent(), todoListSummaryPage.getTotalPages(), todoListSummaryPage.getTotalElements());
     }
 }

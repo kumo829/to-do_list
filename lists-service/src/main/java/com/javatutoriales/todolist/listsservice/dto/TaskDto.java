@@ -23,14 +23,14 @@ public class TaskDto {
     @Null
     private Boolean complete;
 
-    private LocalDate expiration;
+    private LocalDate expirationDate;
 
     public TaskDto(@NotEmpty String name) {
         this.name = name;
     }
 
-    public TaskDto(@NotEmpty String name, LocalDate expiration) {
+    public TaskDto(@NotEmpty String name, LocalDate expirationDate) {
         this.name = name;
-        this.expiration = expiration;
+        this.expirationDate = expirationDate;
     }
 }

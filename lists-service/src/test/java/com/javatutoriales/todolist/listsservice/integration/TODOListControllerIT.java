@@ -5,6 +5,7 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.dto.TaskDto;
+import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListSummaryDto;
 import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -121,7 +122,7 @@ public class TODOListControllerIT {
 
         assertThat(listResponse.getBody().getContent()).isNotNull().isNotEmpty();
 
-        List<TODOListDto> responseBody = listResponse.getBody().getContent();
+        List<TODOListSummaryDto> responseBody = listResponse.getBody().getContent();
 
         assertThat(responseBody).hasSize(10);
         assertThat(responseBody).allMatch(Objects::nonNull);
@@ -147,7 +148,7 @@ public class TODOListControllerIT {
         assertThat(listResponse.getBody().getTotalPages()).isNotNull().isEqualTo(200);
         assertThat(listResponse.getBody().getContent()).isNotNull().isNotEmpty();
 
-        List<TODOListDto> responseBody = listResponse.getBody().getContent();
+        List<TODOListSummaryDto> responseBody = listResponse.getBody().getContent();
 
         assertThat(responseBody).hasSize(5);
         assertThat(responseBody).allMatch(Objects::nonNull);

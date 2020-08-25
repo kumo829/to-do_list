@@ -3,6 +3,7 @@ package com.javatutoriales.todolist.listsservice.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListMapper;
+import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListSummaryDto;
 import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import com.javatutoriales.todolist.listsservice.persistence.TODOListRepository;
@@ -87,11 +88,20 @@ class TODOListServiceTest {
 
         TODOListDto[] lists = mapper.readValue(ClassLoader.getSystemResourceAsStream("datasets/first10Results.json"), TODOListDto[].class);
 
-        List<TODOList> todoLists = Arrays.stream(lists).map(list -> realListMapper.todoListDtoToTODOList(list)).collect(Collectors.toList());
+        List<TODOListSummaryDto> todoListSummary = Arrays.stream(lists).map(todoList -> {
+                    System.out.println("Curr: " + todoList);
+            return new TODOListSummaryDto(todoList.getId(),
+                    todoList.getName(),
+                    todoList.getExpirationDate() == null ? null : todoList.getExpirationDate().toLocalDate(),
+                    Long.valueOf(todoList.getTasks() == null ?  0 : todoList.getTasks().size()),
+                    Long.valueOf(todoList.getTasks() == null ?  0 : todoList.getTasks().size()),
+                    todoList.getCreationDate().toLocalDateTime());
+                }
+        ).collect(Collectors.toList());
 
-        Page<TODOList> todoListPage = new PageImpl<>(todoLists);
+        Page<TODOListSummaryDto> todoListPage = new PageImpl<>(todoListSummary);
 
-        given(listRepository.findAll(any(Pageable.class))).willReturn(todoListPage);
+        given(listRepository.findAllSummary(any(Pageable.class))).willReturn(todoListPage);
 
 
         PagedTodoLists result = listService.getLists("username", 0, 10);

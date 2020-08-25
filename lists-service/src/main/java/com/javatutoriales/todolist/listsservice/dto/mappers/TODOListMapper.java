@@ -4,7 +4,7 @@ import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {DateTimeMapper.class, DateMapper.class})
+@Mapper(componentModel = "spring", uses = {DateTimeMapper.class, DateMapper.class, TaskMapper.class})
 public interface TODOListMapper {
     TODOListDto todoListToTODOListDto(TODOList todoList);
 

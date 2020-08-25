@@ -1,7 +1,11 @@
 package com.javatutoriales.todolist.listsservice.web.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.javatutoriales.todolist.listsservice.dto.TODOListDto;
+import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListSummaryDto;
 import com.javatutoriales.todolist.listsservice.model.PagedTodoLists;
 import com.javatutoriales.todolist.listsservice.services.TODOListService;
 import com.javatutoriales.todolist.testutils.TestUtils;
@@ -17,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
@@ -25,10 +30,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.javatutoriales.todolist.testutils.TestUtils.asJsonString;
@@ -120,7 +128,8 @@ public class TODOListControllerTest {
     void whenGetResultsWithDefaultPaginationAndSorting_thenWillGetFirst10Results() throws Exception {
 
         TODOListDto[] lists = mapper.readValue(ClassLoader.getSystemResourceAsStream("datasets/first10Results.json"), TODOListDto[].class);
-        PagedTodoLists resultList = new PagedTodoLists(Arrays.asList(lists), 1, lists.length);
+
+        PagedTodoLists resultList = new PagedTodoLists(Arrays.stream(lists).map(list -> new TODOListSummaryDto(list.getId(), list.getName(), list.getExpirationDate() == null ? null : list.getExpirationDate().toLocalDate(), list.getTasks() == null ? null : Long.valueOf(list.getTasks().size()), 0L, list.getCreationDate() == null ? null : list.getCreationDate().toLocalDateTime())).collect(Collectors.toList()), 1, lists.length);
 
         given(listService.getLists("username", 0, 10)).willReturn(resultList);
 

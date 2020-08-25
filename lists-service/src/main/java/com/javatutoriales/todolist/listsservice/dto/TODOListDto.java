@@ -33,7 +33,7 @@ public class TODOListDto {
 
     private OffsetDateTime expirationDate;
 
-    private float completion;
+
 
     private List<TaskDto> tasks;
 }
