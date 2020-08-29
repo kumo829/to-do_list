@@ -6,6 +6,8 @@
 #
 # Note that this file is meant for learning Zipkin, not production deployments.
 
+#https://github.com/openzipkin/zipkin/tree/master/docker/examples
+
 version: '3.7'
 
 networks:
@@ -94,13 +96,13 @@ services:
     networks:
       - zipkin-network
 
-  setup_grafana_datasource:
+  setup_grafana_datasource: #https://github.com/openzipkin/zipkin/blob/master/docker/examples/prometheus/create-datasource-and-dashboard.sh
     image: appropriate/curl
     container_name: setup_grafana_datasource
     depends_on:
       - grafana
     volumes:
       - ./prometheus/create-datasource-and-dashboard.sh:/create.sh
-    command: /create.sh/create.sh
+    command: ./create.sh
     networks:
       - zipkin-network

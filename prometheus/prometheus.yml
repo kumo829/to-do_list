@@ -17,7 +17,7 @@ scrape_configs:
         regex: '^status_(\d+)_(.*)$'
         replacement: '${1}'
         target_label: status
-      - source_labels: [__name__]a
+      - source_labels: [__name__]
         regex: '^status_(\d+)_(.*)$'
         replacement: '${2}'
         target_label: path

@@ -1,4 +1,4 @@
-        # sudo docker build -t todo-eureka-server:v1.0.0 .
+# sudo docker build -t todo-eureka-server:v1.0.0 .
 
 FROM openjdk:14.0.1-slim-buster
 VOLUME /tmp
