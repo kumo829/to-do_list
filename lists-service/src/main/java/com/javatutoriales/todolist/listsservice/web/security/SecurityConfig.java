@@ -53,6 +53,7 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 //        http.authorizeRequests().antMatchers("/").hasAuthority("Client");
-        http.authorizeRequests().antMatchers("/").authenticated();
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll()
+                .antMatchers("/").authenticated();
     }
 }

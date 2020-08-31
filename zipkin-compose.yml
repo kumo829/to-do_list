@@ -96,13 +96,13 @@ services:
     networks:
       - zipkin-network
 
-  setup_grafana_datasource: #https://github.com/openzipkin/zipkin/blob/master/docker/examples/prometheus/create-datasource-and-dashboard.sh
-    image: appropriate/curl
-    container_name: setup_grafana_datasource
-    depends_on:
-      - grafana
-    volumes:
-      - ./prometheus/create-datasource-and-dashboard.sh:/create.sh
-    command: ./create.sh
-    networks:
-      - zipkin-network
+#  setup_grafana_datasource: #https://github.com/openzipkin/zipkin/blob/master/docker/examples/prometheus/create-datasource-and-dashboard.sh
+#    image: appropriate/curl
+#    container_name: setup_grafana_datasource
+#    depends_on:
+#      - grafana
+#    volumes:
+#      - ./prometheus/create-datasource-and-dashboard.sh:/create.sh
+#    command: ./create.sh
+#    networks:
+#      - zipkin-network

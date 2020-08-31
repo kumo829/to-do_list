@@ -89,6 +89,11 @@
             <scope>runtime</scope>
         </dependency>
 
+<!--        Monitoring-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-influx</artifactId>
+        </dependency>
 
 <!--        Testing-->
         <dependency>

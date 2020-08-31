@@ -10,9 +10,11 @@ logging:
 
 
 spring:
+
   jpa:
     hibernate:
       ddl-auto: update
+      generate_statistics: true
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
   datasource:
