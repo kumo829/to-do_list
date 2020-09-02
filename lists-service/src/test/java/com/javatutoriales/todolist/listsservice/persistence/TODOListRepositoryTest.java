@@ -1,6 +1,7 @@
 package com.javatutoriales.todolist.listsservice.persistence;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.github.database.rider.junit5.api.DBRider;
 import com.javatutoriales.todolist.listsservice.dto.mappers.TODOListSummaryDto;
 import com.javatutoriales.todolist.listsservice.model.TODOList;
@@ -8,7 +9,6 @@ import com.javatutoriales.todolist.listsservice.model.Task;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,7 +38,7 @@ class TODOListRepositoryTest {
 
     @Test
     @DisplayName("Get TODO-List paged 10 - SUCCESS")
-    @DataSet("todo_lists.json")
+    @DataSet(value = "todo_lists.json", strategy = SeedStrategy.REFRESH)
     void whenPagedDataSetOfTen_thenGetTenSizeElementsList() {
         assertThat(listRepository.count()).isEqualTo(1000);
 
