@@ -94,8 +94,14 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-influx</artifactId>
         </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>6.4</version>
+        </dependency>
 
-<!--        Testing-->
+
+        <!--        Testing-->
         <dependency>
             <groupId>com.javatutoriales.todolist</groupId>
             <artifactId>test-utils</artifactId>

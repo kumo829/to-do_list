@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="Console"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %magenta(%d{ISO8601}) ::%cyan(${HOSTNAME}):: [%highlight(%-5level)] [%blue(%t)] %yellow(%C{1.}): %msg%n
+                %boldRed(%throwable)
+            </Pattern>
+        </layout>
+    </appender>
+
+<!--    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+<!--        <destination>localhost:5044</destination>-->
+<!--        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">-->
+<!--            <providers>-->
+<!--                <mdc/>-->
+<!--                <context/>-->
+<!--                <version/>-->
+<!--                <logLevel/>-->
+<!--                <loggerName/>-->
+<!--                <message/>-->
+<!--                <pattern>-->
+<!--                    <pattern>-->
+<!--                        {-->
+<!--                        "appName": "lists-service"-->
+<!--                        }-->
+<!--                    </pattern>-->
+<!--                </pattern>-->
+<!--                <threadName/>-->
+<!--                <stackTrace/>-->
+<!--            </providers>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <!-- LOG everything at INFO level -->
+    <root level="info">
+        <appender-ref ref="Console"/>
+<!--        <appender-ref ref="logstash"/>-->
+    </root>
+
+    <logger name="com.javatutoriales" level="trace" additivity="false">
+        <appender-ref ref="Console"/>
+    </logger>
+
+</configuration>

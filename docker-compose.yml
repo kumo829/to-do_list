@@ -133,6 +133,8 @@ services:
       - TO-DO-cloud-network
       - lists-network
       - zipkin-network
+#    volumes:
+#      - ~/.docker/containers_volumes/todolist/lists-service:./
     depends_on:
       - lists_db
       - config-server
