@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="microName" source="spring.application.name" defaultValue="not specified"/>
+
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %magenta(%d{ISO8601}) ::%cyan(${HOSTNAME}):: [%highlight(%-5level)] [%blue(%t)] %yellow(%C{1.}): %msg%n
+                %boldRed(%throwable)
+            </Pattern>
+        </layout>
+        <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
+        <!--            <includeCallerData>false</includeCallerData>-->
+        <!--            <includeContext>false</includeContext>-->
+        <!--            <shortenedLoggerNameLength>36</shortenedLoggerNameLength>-->
+        <!--            <customFields>-->
+        <!--                {-->
+        <!--                "custom_field": "xxxx",-->
+        <!--                "spring_property": "${microName}",-->
+        <!--                "jvm_system_variable": "${java.runtime.name} ${java.runtime.version}",-->
+        <!--                "env_variable": "${ENV_VARIABLE}"-->
+        <!--                }-->
+        <!--            </customFields>-->
+        <!--        </encoder>-->
+    </appender>
+
+    <appender name="STDOUT_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <neverBlock>false</neverBlock>
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+    <!--    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+    <!--        <destination>localhost:5044</destination>-->
+    <!--        <reconnectionDelay>5 second</reconnectionDelay>-->
+    <!--        <encoder class="net.logstash.logback.encoder.LogstashEncoder">-->
+    <!--            <includeCallerData>false</includeCallerData>-->
+    <!--            <includeContext>false</includeContext>-->
+    <!--            <shortenedLoggerNameLength>36</shortenedLoggerNameLength>-->
+    <!--            <customFields>-->
+    <!--                {-->
+    <!--                "custom_field": "xxxx",-->
+    <!--                "spring_property": "${microName}",-->
+    <!--                "jvm_system_variable": "${java.runtime.name} ${java.runtime.version}",-->
+    <!--                "env_variable": "${ENV_VARIABLE}"-->
+    <!--                }-->
+    <!--            </customFields>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+
+    <!--    <appender name="LOGSTASH_ASYNC" class="ch.qos.logback.classic.AsyncAppender">-->
+    <!--        <queueSize>500</queueSize>-->
+    <!--        <discardingThreshold>0</discardingThreshold>-->
+    <!--        <neverBlock>false</neverBlock>-->
+    <!--        <appender-ref ref="LOGSTASH"/>-->
+    <!--    </appender>-->
+
+    <!-- LOG everything at INFO level -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT_ASYNC"/>
+        <!--        <appender-ref ref="LOGSTASH_ASYNC" />-->
+    </root>
+
+    <logger name="com.javatutoriales" level="trace" additivity="false">
+        <appender-ref ref="STDOUT_ASYNC"/>
+        <!--        <appender-ref ref="LOGSTASH_ASYNC" />-->
+    </logger>
+
+</configuration>
