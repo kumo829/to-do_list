@@ -7,4 +7,6 @@ public interface TODOListService {
     TODOListDto save(TODOListDto listDto, String username);
 
     PagedTodoLists getLists(String name, int page, int resultsPerPage);
+
+    TODOListDto getList(String username, long listId);
 }

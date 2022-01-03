@@ -54,6 +54,13 @@ public class TODOListServiceImpl implements TODOListService {
 
         return new PagedTodoLists(todoListSummaryPage.getContent(), todoListSummaryPage.getTotalPages(), todoListSummaryPage.getTotalElements());
     }
+
+    @Override
+    @Timed(description = "get single list timed", value = "javatutoriales.list.getsingle.timed")
+    @Counted(description = "get single list counted", value = "javatutoriales.list.getsingle.count")
+    public TODOListDto getList(String username, long listId) {
+        return null;
+    }
 }
 
 
