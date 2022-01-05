@@ -47,3 +47,48 @@ The architecture proposes a series of microservices and three applications, a mo
 - **5044**: Logstash
 - **9200**: Elasticksearch
 - **5601**: Kibana
+
+### What I'm using in this project?
+- Java 14 
+- Maven 3
+- Lombok
+- Mapstruct
+- Spring Framework
+  - Spring Boot 2.3.3.RELEASE
+    - Spring Boot Dev Tools
+    - Spring Data Rest
+    - Spring HATEOAS
+  - Spring Cloud Hoxton.SR6
+    - Eureka Server 
+    - Spring Cloud Oauth2
+    - Spring Cloud Config
+    - LoadBalancer
+    - Resilience4j
+    - Zuul
+  - Spring Security 
+  - Spring Retry
+  - Spring Data
+    - JPA
+    - Mongo
+- Beans Validators
+- Open API (Swagger)
+- MongoDB
+- MySQL 8
+- Logback
+- Micrometer
+- Logstash
+- Open Zipkin
+- Prometheus
+- Grafana
+- Docker
+- Docker Compose 3.7
+
+### What did I learn from this project?
+- The use of various Spring Boot and Spring Cloud Technologies used to create and coordinate microservices, like Spring Load Balancer, Resilience4j, and Spring Cloud Config.
+- How to work with Spring Integration and Spring Retry.
+- How to secure microservices using Spring Security and how to relay authorization tokens to another services.
+- How to monitor and trace requests using Open Zipkin, Prometheus, Grafana, Micrometer and the ELK stack
+- How to deploy the independent microservices using docker and how to coordinate the start of the services and their resources using docker compose
+- How to work with different and independent databases (SQL and NoSQL) using Spring Data.
+- How to document the services using Open API (swagger).
+- How to use various cloud services in AWS. The application is no longer running in AWS, but it did for about 6 months.
